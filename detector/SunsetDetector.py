@@ -254,6 +254,20 @@ class SunsetDetector:
             raise ValueError("Save method must be either 's3' or 'local'")
         logger.info(f"Save method changed to {save_method}.")
 
+    def sorted_images(self) -> list:
+        """
+        Get the scores sorted by score value.
+
+        :return: List of tuples (image_path, score) sorted by score
+        """
+        if not self.scores:
+            logger.warning("No scores available to sort.")
+            return []
+
+        # Convert any numpy float values to standard Python floats
+        normalized_scores = {k: float(v) for k, v in self.scores.items()}
+        return sorted(normalized_scores.items(), key=lambda x: x[1], reverse=True)
+
     def run(self) -> bool:
         """
         Run the sunset detection process.
