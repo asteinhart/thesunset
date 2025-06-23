@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 from pathlib import Path
 import os
-from detector.logger import logger
+from logger import logger
 from datetime import date
 from utils import find_sunset_time, upload_to_s3
 import json
