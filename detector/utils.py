@@ -9,7 +9,7 @@ import os
 import shutil
 import boto3
 from botocore.exceptions import NoCredentialsError
-from env import (
+from ..env import (
     AWS_ACCESS_KEY,
     AWS_SECRET_KEY,
 )
