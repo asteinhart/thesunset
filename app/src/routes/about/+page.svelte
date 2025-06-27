@@ -2,7 +2,15 @@
 	import '../../app.css';
 	import diagram from '$lib/images/diagram.png';
 	import diagram_mobile from '$lib/images/diagram_mobile.png';
+
+	let windowWidth = $state(0);
+	let isMobile = $derived(windowWidth < 768);
+
+	$inspect(windowWidth);
+	$inspect(isMobile);
 </script>
+
+<svelte:window bind:innerWidth={windowWidth} />
 
 <main>
 	<div class="header">
@@ -54,7 +62,7 @@
 			</div>
 			<div class="section">How it works</div>
 			<div class="works-img">
-				<img src={diagram} alt="diagram of how the app works" />
+				<img src={isMobile ? diagram_mobile : diagram} alt="diagram of how the app works" />
 			</div>
 
 			<div class="subsection">1. Take snapshots of the sunset every day</div>
@@ -78,7 +86,108 @@
 					learning model could possibly be helpful but since we are simply comparing the same scene
 					over time in this project, I believe this simpler approach yields acceptable results.
 				</p>
+				<p>Let's see some examples.</p>
+			</div>
 
+			<div class="diagram-container">
+				<div class="diagram">
+					<!-- Each row contains sun visualization with time label and image -->
+
+					<div class="sunset-row">
+						<div class="sunset-visual sun-pos-1">
+							<div class="time">20 min before Sunset</div>
+							<div class="horizon-line"></div>
+							<div class="sun"></div>
+						</div>
+						<div class="thumbnail"><div class="placeholder-img">-20m</div></div>
+						<div class="thumbnail"><div class="placeholder-img">-20m</div></div>
+					</div>
+
+					<div class="sunset-row">
+						<div class="sunset-visual sun-pos-2">
+							<div class="time">15 min before</div>
+							<div class="horizon-line"></div>
+							<div class="sun"></div>
+						</div>
+						<div class="thumbnail"><div class="placeholder-img">-15m</div></div>
+						<div class="thumbnail"><div class="placeholder-img">-15m</div></div>
+					</div>
+
+					<div class="sunset-row">
+						<div class="sunset-visual sun-pos-3">
+							<div class="time">10 min before</div>
+							<div class="horizon-line"></div>
+							<div class="sun"></div>
+						</div>
+						<div class="thumbnail"><div class="placeholder-img">-10m</div></div>
+						<div class="thumbnail"><div class="placeholder-img">-10m</div></div>
+					</div>
+
+					<div class="sunset-row">
+						<div class="sunset-visual sun-pos-4">
+							<div class="time">5 min before</div>
+							<div class="horizon-line"></div>
+							<div class="sun"></div>
+						</div>
+						<div class="thumbnail"><div class="placeholder-img">-5m</div></div>
+						<div class="thumbnail"><div class="placeholder-img">-5m</div></div>
+					</div>
+
+					<div class="sunset-row">
+						<div class="sunset-visual sun-pos-5">
+							<div class="time">Sunset</div>
+							<div class="horizon-line"></div>
+							<div class="sun"></div>
+						</div>
+						<div class="thumbnail"><div class="placeholder-img">Sunset</div></div>
+						<div class="thumbnail"><div class="placeholder-img">Sunset</div></div>
+					</div>
+
+					<div class="sunset-row">
+						<div class="sunset-visual sun-pos-6">
+							<div class="time">5 min after Sunset</div>
+							<div class="horizon-line"></div>
+							<div class="sun"></div>
+						</div>
+						<div class="thumbnail"><div class="placeholder-img">+5m</div></div>
+						<div class="thumbnail"><div class="placeholder-img">+5m</div></div>
+					</div>
+
+					<div class="sunset-row">
+						<div class="sunset-visual sun-pos-7">
+							<div class="time">10 min after</div>
+							<div class="horizon-line"></div>
+							<div class="sun"></div>
+						</div>
+						<div class="thumbnail"><div class="placeholder-img">+10m</div></div>
+						<div class="thumbnail"><div class="placeholder-img">+10m</div></div>
+					</div>
+
+					<div class="sunset-row">
+						<div class="sunset-visual sun-pos-8">
+							<div class="time">15 min after</div>
+							<div class="horizon-line"></div>
+							<div class="sun"></div>
+						</div>
+						<div class="thumbnail"><div class="placeholder-img">+15m</div></div>
+						<div class="thumbnail"><div class="placeholder-img">+15m</div></div>
+					</div>
+
+					<div class="sunset-row">
+						<div class="sunset-visual sun-pos-9">
+							<div class="time">20 min after</div>
+							<div class="horizon-line"></div>
+							<div class="sun"></div>
+						</div>
+						<div class="thumbnail"><div class="placeholder-img">+20m</div></div>
+						<div class="thumbnail"><div class="placeholder-img">+20m</div></div>
+					</div>
+				</div>
+				<p class="diagram-caption">
+					Camera captures images every 5 minutes, from 20 minutes before sunset to 20 minutes after.
+				</p>
+			</div>
+			<div class="prose">
 				<p>
 					After an image is selected, the best image is uploaded to an S3 bucket along with some
 					metadata and the rest of the files are removed from the Raspberry Pi to ensure there are
@@ -137,96 +246,6 @@
 					job, and it works pretty well as is. Once I actually get a digital picture frame, there
 					will be some additional work to figure out how to automate picture uploads and display
 					rotations.
-				</p>
-			</div>
-
-			<div class="diagram-container">
-				<h3>How It Works</h3>
-				<div class="diagram">
-					<!-- Each row contains sun visualization with time label and image -->
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-1">
-							<div class="time">Sunset -20 min</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
-						</div>
-						<div class="thumbnail"><div class="placeholder-img">-20m</div></div>
-					</div>
-
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-2">
-							<div class="time">Sunset -15 min</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
-						</div>
-						<div class="thumbnail"><div class="placeholder-img">-15m</div></div>
-					</div>
-
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-3">
-							<div class="time">Sunset -10 min</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
-						</div>
-						<div class="thumbnail"><div class="placeholder-img">-10m</div></div>
-					</div>
-
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-4">
-							<div class="time">Sunset -5 min</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
-						</div>
-						<div class="thumbnail"><div class="placeholder-img">-5m</div></div>
-					</div>
-
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-5">
-							<div class="time">Sunset</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
-						</div>
-						<div class="thumbnail"><div class="placeholder-img">Sunset</div></div>
-					</div>
-
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-6">
-							<div class="time">Sunset +5 min</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
-						</div>
-						<div class="thumbnail"><div class="placeholder-img">+5m</div></div>
-					</div>
-
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-7">
-							<div class="time">Sunset +10 min</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
-						</div>
-						<div class="thumbnail"><div class="placeholder-img">+10m</div></div>
-					</div>
-
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-8">
-							<div class="time">Sunset +15 min</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
-						</div>
-						<div class="thumbnail"><div class="placeholder-img">+15m</div></div>
-					</div>
-
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-9">
-							<div class="time">Sunset +20 min</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
-						</div>
-						<div class="thumbnail"><div class="placeholder-img">+20m</div></div>
-					</div>
-				</div>
-				<p class="diagram-caption">
-					Camera captures images every 5 minutes, from 20 minutes before sunset to 20 minutes after.
 				</p>
 			</div>
 		</div>
@@ -349,14 +368,8 @@
 	}
 
 	.diagram-container {
-		margin: 3rem 0;
-		width: 100%;
-	}
-
-	.diagram {
-		display: flex;
-		width: 100%;
-		margin: 1.5rem 0;
+		margin: auto;
+		width: 60%;
 	}
 
 	.time {
@@ -378,13 +391,15 @@
 	.sunset-row {
 		display: flex;
 		align-items: center;
-		margin-bottom: 1rem;
+		margin-bottom: 0.5rem;
+		justify-content: center;
+		gap: 1rem;
 	}
 
 	.sunset-visual {
 		position: relative;
 		height: 50px;
-		width: 30%;
+		width: 20%;
 		margin-right: 1rem;
 		padding-top: 20px;
 	}
@@ -466,12 +481,25 @@
 
 	/* Responsive adjustments for smaller screens */
 	@media (max-width: 768px) {
-		.body {
+		.title-block {
 			width: 90%;
+		}
+		.title {
+			font-size: 1.8em;
 		}
 		.subtitle {
-			width: 90%;
+			font-size: 1rem;
+			width: 100%;
 		}
+		.section,
+		.subsection,
+		.prose {
+			width: 95%;
+		}
+		.works-img img {
+			width: 95%;
+		}
+
 		.sunset-row {
 			flex-direction: column;
 			align-items: center;
