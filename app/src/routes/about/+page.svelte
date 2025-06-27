@@ -22,7 +22,7 @@
 		<div class="body">
 			<div class="prose">
 				<p>
-					After missing the sunset one night and only seeing the splendor of it all over instagram
+					After missing the sunset one night and only seeing the splendor of it all over Instagram
 					later in the evening, I dreamed up a digital photo frame that displayed the best moment of
 					the sunset from the previous night. Thus, each day the frame showed the best moment of the
 					sunset from the previous night and after the current day's sunset finished, it updated for
@@ -57,11 +57,11 @@
 				<img src={diagram} alt="diagram of how the app works" />
 			</div>
 
-			<div class="subsection">1.Take snapshots of the sunset every day</div>
+			<div class="subsection">1. Take snapshots of the sunset every day</div>
 			<div class="prose">
 				<p>
 					A cron job runs on the Raspberry Pi each day at 4:00pm ET. Using the Python package
-					<code>astral</code>, I check what the time the sunset is and take a picture using a
+					<code>astral</code>, I check what the time of sunset is and take a picture using a
 					Raspberry Pi every 2 minutes starting 20 minutes before the sunset and continuing for 20
 					minutes after the sunset for a total of 20 images. I save these locally on the microSD
 					card on the Raspberry Pi.
@@ -100,13 +100,14 @@
 				<p>
 					As a dedicated fan of type hints in Python, this project was a good excuse to finally
 					switch over to TypeScript from JavaScript. I also continued to build my experience with
-					Svelte 5 spent some extra time learning more about AWS S3 configurations and permissions.
+					Svelte 5 and spent some extra time learning more about AWS S3 configurations and
+					permissions.
 				</p>
 
 				<p>
 					Since the images are stored on S3, I can simply make the bucket public for read access
 					(bots pls ignore) removing the need for any backend and allowing me to host the app on
-					GitHub Pages for free. This was my first time hosting a Svelte app on GitHub pages and
+					GitHub Pages for free. This was my first time hosting a Svelte app on GitHub pages and I
 					found the process straightforward once I understood the proper build configuration.
 				</p>
 			</div>
