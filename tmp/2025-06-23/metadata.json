@@ -1,8 +1,0 @@
-{
-    "sunset_time": "2025-06-22_20:30:29",
-    "today": "2025-06-23",
-    "detect_method": "red",
-    "save_method": "s3",
-    "num_images": 11,
-    "best_image": "images/5.jpeg"
-}
