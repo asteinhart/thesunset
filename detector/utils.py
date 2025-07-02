@@ -149,7 +149,7 @@ def determine_start_end_time(when: str = "today", buffer_min: int = 20):
     return start_time, sunset, end_time
 
 
-def tmp_cleanup(tmp_dir: Path = DIR / "detector/tmp"):
+def tmp_cleanup(tmp_dir: Path = DIR / "tmp/"):
     """
     Clean up temporary files in the specified directory.
 

@@ -54,6 +54,10 @@ class SunsetDetector:
         best_image = None
         best_score = 0.0
 
+        if not self.images or not os.path.exists(self.images):
+            logger.error(f"Images path {self.images} does not exist.")
+            return False
+
         image_paths = [
             f
             for f in os.listdir(self.images)

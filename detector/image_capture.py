@@ -8,8 +8,6 @@ import os
 DIR = Path(__file__).parent.resolve()
 
 
-# TODO fix paths
-# TODO add picamera?
 def capture_images(
     start_time: datetime,
     end_time: datetime,

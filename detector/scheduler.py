@@ -1,13 +1,13 @@
 import schedule
 import time
-from datetime import datetime, timedelta
+from datetime import timedelta
 import os
 from pathlib import Path
 
 from SunsetDetector import SunsetDetector
 from image_capture import capture_images
 from logger import logger
-from utils import determine_start_end_time
+from utils import determine_start_end_time, tmp_cleanup
 
 DIR = Path(__file__).parent.resolve()
 
@@ -36,6 +36,8 @@ def run(take_image: bool = True) -> bool:
     )
     detector = SunsetDetector(images=DIR / "tmp")
     detector.run()
+
+    tmp_cleanup(tmp_dir=DIR / "tmp")
 
     schedule_next_run()
 
