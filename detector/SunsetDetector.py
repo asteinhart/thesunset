@@ -5,8 +5,10 @@ from pathlib import Path
 import os
 from logger import logger
 from datetime import date
-from utils import find_sunset_time, upload_to_s3
+from utils import find_sunset_time, upload_to_s3, tmp_cleanup
 import json
+
+DIR = Path(__file__).parent.resolve()
 
 
 class SunsetDetector:
@@ -194,6 +196,11 @@ class SunsetDetector:
 
         # upload metadata to s3
         metadata_path = f"tmp/{self.today}/metadata.json"
+        # Create directory if it doesn't exist
+        metadata_dir = os.path.dirname(metadata_path)
+        if not os.path.exists(metadata_dir):
+            os.makedirs(metadata_dir)
+
         with open(metadata_path, "w") as f:
             json.dump(self.metadata, f, indent=4)
         upload_to_s3(metadata_path, s3_object=f"{self.today}/metadata.json")
@@ -211,7 +218,7 @@ class SunsetDetector:
             logger.error("No best image found to save.")
             return False
 
-        save_path = f"tmp/{self.today}/best_sunset.jpg"
+        save_path = f"{DIR}/tmp/{self.today}/best_sunset.jpg"
         save_dir = os.path.dirname(save_path)
 
         # Create directory if it doesn't exist
@@ -224,7 +231,7 @@ class SunsetDetector:
             logger.info(f"Best image saved to {save_path}")
 
             # upload metadata to s3
-            metadata_path = f"tmp/{self.today}/metadata.json"
+            metadata_path = f"{DIR}/tmp/{self.today}/metadata.json"
             if not os.path.exists(os.path.dirname(f"tmp/{self.today}")):
                 os.makedirs(os.path.dirname(f"tmp/{self.today}"))
 
@@ -287,5 +294,6 @@ class SunsetDetector:
             return False
 
         logger.info("Sunset detection and saving completed successfully.")
+        tmp_cleanup
 
         return True

@@ -8,12 +8,16 @@ import pytz
 import os
 import shutil
 import boto3
+from datetime import datetime, timedelta
 from botocore.exceptions import NoCredentialsError
-from ..env import (
+from env import (
     AWS_ACCESS_KEY,
     AWS_SECRET_KEY,
 )
+from pathlib import Path
 from logger import logger
+
+DIR = Path(__file__).parent.resolve()
 
 
 def upload_to_s3(local_file, bucket="thesunset", s3_object=None):
@@ -132,7 +136,20 @@ def find_sunset_time(
     return sunset.astimezone(pytz.timezone(city.timezone))
 
 
-def tmp_cleanup(tmp_dir):
+def determine_start_end_time(when: str = "today", buffer_min: int = 20):
+    if when == "today":
+        date = datetime.now()
+    elif when == "tomorrow":
+        date = datetime.now() + timedelta(days=1)
+
+    sunset = find_sunset_time(date=date)
+    start_time = sunset - timedelta(minutes=buffer_min)
+    end_time = sunset + timedelta(minutes=buffer_min)
+
+    return start_time, sunset, end_time
+
+
+def tmp_cleanup(tmp_dir: Path = DIR / "detector/tmp"):
     """
     Clean up temporary files in the specified directory.
 
