@@ -1,72 +1,185 @@
 <script lang="ts">
 	import '../app.css';
+
+	import Header from '$lib/components/Header.svelte';
+	import Calendar from '$lib/components/Calendar.svelte';
+	import Graph from '$lib/components/Graph.svelte';
+	import Highlights from '$lib/components/Highlights.svelte';
+
 	import { getSunsetImage, formatDate } from '$lib/utils.ts';
 	import { onMount } from 'svelte';
+	import { currentDate } from '$lib/store';
+	import { format } from 'date-fns';
 
-	let sunsetDate = $state(formatDate(new Date()));
+	let sunsetDate = $state(formatDate(new Date(2025, 6, 1)));
 	let sunsetImage = $derived(getSunsetImage(sunsetDate));
+	let active = $state<'calendar' | 'chart' | null>('calendar');
 
-	$inspect(sunsetDate);
+	// let currentSunsetTime = $derived(() => {
+	// 	const date = new Date(sunsetDate);
+	// 	return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+	// });
+	let currentSunsetTime = $state('8:35pm Tuesday, July 5th, 2025');
+
+	// let timing = $derived(() => {
+	// 	const date = new Date(sunsetDate);
+	// 	return `Sunset on ${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+	// });
+	let timing = $state('12 minutes after the Sunset');
+
+	//let testCurrentDate = $derived(format($currentDate, 'MM-dd-yyyy'));
+
+	$inspect(sunsetDate, active, $currentDate);
 </script>
 
-<div class="content">
-	<h2>Sunsets for {sunsetDate}</h2>
-	<img src={sunsetImage} alt="" />
+<Header />
 
-	<div>
-		Choose a different date
-		<input type="date" bind:value={sunsetDate} />
+<div class="content">
+	<div class="section">
+		<div class="settings">
+			<div class="controls">
+				<button
+					class="toggle-btn py-2 px-4 border rounded-l font-semibold transition-colors"
+					class:bg-[#fba58b]={active === 'calendar'}
+					class:text-white={active === 'calendar'}
+					class:border-[#fba58b]={active === 'calendar'}
+					class:bg-transparent={active !== 'calendar'}
+					class:text-[#fba58b]={active !== 'calendar'}
+					class:hover:bg-[#fba58b]={active !== 'calendar'}
+					class:hover:text-white={active !== 'calendar'}
+					onclick={() => (active = 'calendar')}
+					>Calendar
+				</button><button
+					class="chart-btn py-2 px-4 border border-l-0 rounded-r font-semibold transition-colors"
+					class:bg-[#fba58b]={active === 'chart'}
+					class:text-white={active === 'chart'}
+					class:border-[#fba58b]={active === 'chart'}
+					class:bg-transparent={active !== 'chart'}
+					class:text-[#fba58b]={active !== 'chart'}
+					class:hover:bg-[#fba58b]={active !== 'chart'}
+					class:hover:text-white={active !== 'chart'}
+					onclick={() => (active = 'chart')}>Chart</button
+				>
+			</div>
+			<div class="mt-4">
+				{#if active === 'chart'}
+					<Graph />
+				{:else}
+					<Calendar />
+				{/if}
+			</div>
+		</div>
+		<div class="image">
+			<div class="image-container">
+				<div class="image-header">
+					<h3>{currentSunsetTime}</h3>
+					<p>{timing}</p>
+					<!-- <p>{$currentDate}</p> -->
+				</div>
+				{#if sunsetImage}
+					<img src={sunsetImage} alt="Sunset for {sunsetDate}" class="full-image" />
+				{/if}
+			</div>
+		</div>
+	</div>
+
+	<div class="highlights-section">
+		<Highlights />
 	</div>
 </div>
 
 <style>
-	h2 {
-		display: -webkit-box;
+	.section {
 		display: flex;
-		-webkit-box-pack: center;
-		justify-content: center;
-		-webkit-box-orient: vertical;
-		-webkit-box-direction: normal;
-		flex-direction: column;
 		width: 100%;
-		margin: 0 auto 4rem;
-		text-align: center;
-		text-transform: capitalize;
-		font-family: 'Savate', sans-serif;
-		font-size: var(--44px);
-		padding: 3rem 0 0;
-		z-index: 100;
-		position: relative;
-		overflow: hidden;
-		min-height: 15rem;
+		height: 75vh;
+		gap: 0 1rem 0 0; /* Only gap on the right side between settings and image */
 	}
 
-	h2:after {
-		font-family: 'Savate', sans-serif;
-		position: absolute;
-		font-weight: 900;
-		font-size: 200px;
-		text-align: center;
-		left: 50%;
-		-webkit-transform: translate(-50%, -10%);
-		transform: translate(-50%, -10%);
-		text-transform: uppercase;
-		pointer-events: none;
-		z-index: -1;
-		letter-spacing: -0.5rem;
+	.settings {
+		flex: 2; /* 2/5 of the space */
+		padding: 2rem 0 2rem 2rem; /* Remove right padding */
+		min-width: 0; /* Allows flex item to shrink below content size */
 	}
 
-	.content h2:after {
-		content: 'Sunsets';
-		background: linear-gradient(to bottom, var(--light-yellow) 15%, var(--dark-orange));
-		-webkit-text-fill-color: transparent;
-		-webkit-background-clip: text;
-		background-clip: text;
-		opacity: 0.5;
+	.image {
+		flex: 3; /* 3/5 of the space */
+		padding: 2rem;
+		min-width: 0; /* Allows flex item to shrink below content size */
 	}
 
-	.content {
-		background: linear-gradient(to bottom, var(--light-yellow) 15%, var(--dark-orange) 100%);
-		height: auto;
+	.image-container {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+
+	.image-header {
+		margin-bottom: 1rem;
+	}
+
+	.image-header h3 {
+		margin: 0 0 0.5rem 0;
+		font-size: 1.5rem;
+	}
+
+	.image-header p {
+		margin: 0;
+		color: #666;
+	}
+
+	.full-image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 8px;
+		flex: 1;
+	}
+
+	.highlights-section {
+		margin-top: 2rem;
+		padding: 2rem;
+	}
+
+	/* Mobile styles */
+	@media (max-width: 950px) {
+		.section {
+			flex-direction: column; /* Stack vertically */
+			height: auto;
+		}
+
+		.settings {
+			flex: none; /* Remove flex grow on mobile */
+			padding: 1rem;
+			order: 2; /* Settings appear second */
+		}
+
+		.image {
+			flex: none; /* Remove flex grow on mobile */
+			padding: 1rem;
+			order: 1; /* Image appears first */
+		}
+
+		.full-image {
+			width: 100%;
+			height: 25vh;
+			object-fit: cover;
+		}
+
+		.image-header h3 {
+			font-size: 1.25rem;
+		}
+
+		.highlights-section {
+			padding: 1rem;
+		}
+	}
+
+	/* Tablet styles */
+	@media (max-width: 1024px) and (min-width: 769px) {
+		.settings,
+		.image {
+			padding: 1.5rem;
+		}
 	}
 </style>

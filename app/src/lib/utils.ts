@@ -3,21 +3,21 @@
 const s3Prefix = 'https://thesunset.s3.amazonaws.com';
 
 export function getSunsetImage(date: string): string {
-    console.log(`Generating image path for date: ${date}`);
-    const path = `${s3Prefix}/${date.substring(0,4)}-${date.substring(5,7)}-${date.substring(8,10)}/best_sunset.jpg`;
-    console.log(path)
-    return path
+	console.log(`Generating image path for date: ${date}`);
+	const path = `${s3Prefix}/${date.substring(0, 4)}-${date.substring(5, 7)}-${date.substring(8, 10)}/best_sunset.jpg`;
+	console.log(path);
+	return path;
 }
 
 export function formatDate(date: Date | string): string {
-    // Convert string to Date if necessary
-    if (typeof date === 'string') {
-        date = new Date(date);
-    }
+	// Convert string to Date if necessary
+	if (typeof date === 'string') {
+		date = new Date(date);
+	}
 
-    console.log(`Formatting date: ${date}`);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
+	console.log(`Formatting date: ${date}`);
+	const year = date.getFullYear();
+	const month = (date.getMonth() + 1).toString().padStart(2, '0');
+	const day = date.getDate().toString().padStart(2, '0');
+	return `${year}-${month}-${day}`;
 }

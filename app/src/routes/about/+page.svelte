@@ -2,22 +2,16 @@
 	import '../../app.css';
 	import diagram from '$lib/images/diagram.png';
 	import diagram_mobile from '$lib/images/diagram_mobile.png';
+	import Header from '$lib/components/Header.svelte';
 
 	let windowWidth = $state(0);
 	let isMobile = $derived(windowWidth < 768);
-
-	$inspect(windowWidth);
-	$inspect(isMobile);
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
 
 <main>
-	<div class="header">
-		<div class="header-left">
-			<a href="https://austinsteinhart.com" class="author-link">Austin Steinhart</a>
-		</div>
-	</div>
+	<Header />
 	<div class="article">
 		<div class="title-block">
 			<div class="title">Never Miss the Sunset Again</div>
@@ -25,7 +19,7 @@
 				Using a small camera and some code, enjoy last nights' sunset every day, all day.
 			</div>
 			<p class="byline">By <a href="austinsteinhart.com">Austin Steinhart</a> | Summer 2025</p>
-			<hr />
+			<hr class="divider" />
 		</div>
 		<div class="body">
 			<div class="prose">
@@ -43,7 +37,7 @@
 				</p>
 				<a href="/" class="sunset-button"> See the latest sunset </a>
 				<p>With this project, I wanted to:</p>
-				<ul>
+				<ul class="list-disc list-inside">
 					<li>Make something I thought was cool</li>
 					<li>Build a full stack* app and not overcomplicate the design</li>
 					<li>Learn a few new tools / technologies</li>
@@ -223,7 +217,7 @@
 			<div class="section">Future Work</div>
 			<div class="prose">
 				<p>There are two main areas for improvement:</p>
-				<ul>
+				<ul class="list-disc list-inside ml-4 space-y-2">
 					<li>
 						Explore better methods to determine the "best" sunset. While my simple scoring system
 						works, more sophisticated computer vision techniques or even a machine learning model
@@ -253,6 +247,10 @@
 </main>
 
 <style>
+	p {
+		font-family: 'Public Sans', sans-serif;
+		padding-block: 0.5rem;
+	}
 	.header {
 		display: flex;
 		justify-content: space-between;
@@ -262,7 +260,6 @@
 		font-weight: bold;
 	}
 	.author-link {
-		font-family: 'Open Sans', sans-serif;
 		font-size: 1.2rem;
 		color: #333;
 		text-decoration: none;
@@ -275,7 +272,6 @@
 		margin: auto;
 	}
 	.title {
-		font-family: 'Open Sans', sans-serif;
 		font-size: 2.5rem;
 		font-weight: bold;
 		text-align: left;
@@ -283,17 +279,19 @@
 	}
 
 	.subtitle {
-		font-family: 'Open Sans', sans-serif;
 		font-size: 1.3rem;
 		text-align: left;
-		margin-bottom: 1rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.byline {
 		font-size: 0.9rem;
 		margin: auto;
-		margin-bottom: 1rem;
 		color: #666;
+	}
+
+	.divider {
+		margin-bottom: 0.5rem;
 	}
 
 	.byline a {
@@ -333,7 +331,7 @@
 		font-weight: bold;
 		margin: auto;
 		margin-top: 2rem;
-		margin-bottom: 1rem;
+		margin-bottom: 0.5rem;
 		width: 50%;
 	}
 
@@ -343,7 +341,7 @@
 		font-weight: bold;
 		margin: auto;
 		margin-top: 2rem;
-		margin-bottom: 1rem;
+		margin-bottom: 0.2rem;
 		width: 50%;
 	}
 
