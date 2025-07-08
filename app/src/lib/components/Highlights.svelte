@@ -2,11 +2,12 @@
 	import { getSunsetImage } from '../utils';
 	import { format } from 'date-fns';
 	import { currentDate } from '$lib/store';
+	import { formatDate } from '$lib/utils.ts';
 
 	// Sample highlight dates - you can make this dynamic later
 	const highlights = [
-		{ date: '7/7/25', formattedDate: '07-07-2025' },
-		{ date: '7/16/25', formattedDate: '07-16-2025' },
+		{ date: '7/1/25', formattedDate: '07-01-2025' },
+		{ date: '6/23/25', formattedDate: '06-23-2025' },
 		{ date: '2/7/23', formattedDate: '02-07-2023' },
 		{ date: '10/5/26', formattedDate: '10-05-2026' },
 		{ date: '7/7/25', formattedDate: '07-07-2025' },
@@ -54,7 +55,10 @@
 					onkeydown={(e) => e.key === 'Enter' && handleHighlightClick(highlight.formattedDate)}
 				>
 					{#if getSunsetImage(highlight.formattedDate)}
-						<img src={getSunsetImage(highlight.formattedDate)} alt="Sunset for {highlight.date}" />
+						<img
+							src={getSunsetImage(formatDate(highlight.formattedDate))}
+							alt="Sunset for {highlight.date}"
+						/>
 					{:else}
 						<div class="placeholder-image"></div>
 					{/if}

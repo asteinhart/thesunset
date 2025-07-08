@@ -11,8 +11,15 @@
 	import { currentDate } from '$lib/store';
 	import { format } from 'date-fns';
 
-	let sunsetDate = $state(formatDate(new Date(2025, 6, 1)));
-	let sunsetImage = $derived(getSunsetImage(sunsetDate));
+	let sunsetDate = $state(formatDate($currentDate));
+	let sunsetImage = $derived.by(() => getSunsetImage(sunsetDate));
+
+	$effect(() => {
+		// Update the sunset date whenever the current date changes
+		sunsetDate = formatDate($currentDate);
+		sunsetImage = getSunsetImage(sunsetDate);
+	});
+
 	let active = $state<'calendar' | 'chart' | null>('calendar');
 
 	// let currentSunsetTime = $derived(() => {
@@ -25,11 +32,13 @@
 	// 	const date = new Date(sunsetDate);
 	// 	return `Sunset on ${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 	// });
-	let timing = $state('12 minutes after the Sunset');
+	let timing = $state('Peak 12 minutes after the Sunset');
 
 	//let testCurrentDate = $derived(format($currentDate, 'MM-dd-yyyy'));
 
-	$inspect(sunsetDate, active, $currentDate);
+	$inspect('currnetDate', $currentDate);
+	$inspect('sunset date', $currentDate);
+	$inspect('path', sunsetImage);
 </script>
 
 <Header />
