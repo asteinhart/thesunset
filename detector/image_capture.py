@@ -28,8 +28,8 @@ def capture_images(
             camera.resolution = (1024, 768)
             while datetime.now() < end_time:
                 if datetime.now() >= start_time:
-                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                    camera.capture(export_path / f"sunset_{timestamp}.jpg")
+                    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+                    camera.capture(export_path / f"{timestamp}.jpg")
                 time.sleep(frequency)
 
     return True

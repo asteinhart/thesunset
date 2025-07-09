@@ -9,6 +9,7 @@ import os
 import shutil
 import boto3
 from datetime import datetime, timedelta
+import numpy as np
 from botocore.exceptions import NoCredentialsError
 from env import (
     AWS_ACCESS_KEY,
@@ -20,7 +21,9 @@ from logger import logger
 DIR = Path(__file__).parent.resolve()
 
 
-def upload_to_s3(local_file, bucket="thesunset", s3_object=None):
+def upload_to_s3(
+    local_file: str, bucket: str = "thesunset", s3_object: str = None
+) -> bool:
     """
     Upload a file to an S3 bucket using access keys
 
@@ -55,7 +58,38 @@ def upload_to_s3(local_file, bucket="thesunset", s3_object=None):
     return False
 
 
-def cv2_resize_image(image_path, target_size):
+def download_from_s3(
+    s3_object: str, local_file: str, bucket: str = "thesunset"
+) -> bool:
+    """
+    Download a file from an S3 bucket using access keys
+
+    :param s3_object: S3 object name to download
+    :param local_file: Path to save the downloaded file
+    :param bucket: Source S3 bucket name
+    :return: True if successful, False otherwise
+    """
+    # Create session with explicit credentials
+    session = boto3.Session(
+        aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY
+    )
+
+    s3 = session.client("s3")
+
+    try:
+        s3.download_file(Bucket=bucket, Key=s3_object, Filename=local_file)
+        logger.info(f"✅ Successfully downloaded {s3_object} to {local_file}")
+        return True
+    except FileNotFoundError:
+        logger.error(f"❌ Local path {local_file} not found")
+    except NoCredentialsError:
+        logger.error("❌ AWS credentials were invalid or not found")
+    except Exception as e:
+        logger.error(f"❌ Download failed: {str(e)}")
+    return False
+
+
+def cv2_resize_image(image_path: str, target_size: tuple) -> np.ndarray:
     """
     Resize an image to the target size while maintaining aspect ratio using cv2.
 
@@ -105,13 +139,13 @@ def cv2_show_image(image):
 
 
 def find_sunset_time(
-    city_name="Brooklyn",
-    region_name="New York",
-    timezone_name="America/New_York",
-    latitude=40.723258099845616,
-    longitude=-73.94263482667436,
-    date: datetime = datetime.now(),
-):
+    city_name: str = "Brooklyn",
+    region_name: str = "New York",
+    timezone_name: str = "America/New_York",
+    latitude: float = 40.723258099845616,
+    longitude: float = -73.94263482667436,
+    date: datetime = None,
+) -> datetime:
     """Find the sunset time for a given city using the Astral library.
     Args:
         city_name (str): Name of the city.
@@ -121,6 +155,13 @@ def find_sunset_time(
         longitude (float): Longitude of the city.
         date (datetime, optional): The date for which to find the sunset time. Defaults to the current date.
     """
+    if date is None:
+        # Get current date in the target timezone instead of naive local time
+        target_tz = pytz.timezone(timezone_name)
+        date = datetime.now(target_tz).date()
+    elif hasattr(date, "date"):
+        # If datetime object passed, extract just the date part
+        date = date.date()
 
     city = LocationInfo(
         name=city_name,
@@ -130,13 +171,13 @@ def find_sunset_time(
         longitude=longitude,
     )
 
-    s = sun(city.observer, date=date)
+    s = sun(city.observer, date=date, tzinfo=pytz.timezone(city.timezone))
     sunset = s["sunset"]
 
     return sunset.astimezone(pytz.timezone(city.timezone))
 
 
-def determine_start_end_time(when: str = "today", buffer_min: int = 20):
+def determine_start_end_time(when: str = "today", buffer_min: int = 20) -> tuple:
     if when == "today":
         date = datetime.now()
     elif when == "tomorrow":
@@ -149,7 +190,7 @@ def determine_start_end_time(when: str = "today", buffer_min: int = 20):
     return start_time, sunset, end_time
 
 
-def tmp_cleanup(tmp_dir: Path = DIR / "tmp/"):
+def tmp_cleanup(tmp_dir: Path = DIR / "tmp/") -> None:
     """
     Clean up temporary files in the specified directory.
 

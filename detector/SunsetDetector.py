@@ -4,9 +4,11 @@ from PIL import Image
 from pathlib import Path
 import os
 from logger import logger
-from datetime import date
+from datetime import date, datetime
 from utils import find_sunset_time, upload_to_s3, tmp_cleanup
 import json
+from utils import download_from_s3
+import tempfile
 
 DIR = Path(__file__).parent.resolve()
 
@@ -190,7 +192,24 @@ class SunsetDetector:
         :param save_path: Path where the best image will be saved
         :return: True if successful, False otherwise
         """
-        save_path = f"{self.today}/best_sunset.jpg"
+
+        # convert to webp
+        self.best_image = str(self.best_image)
+        if not self.best_image.lower().endswith(".webp"):
+            logger.info("Converting best image to webp format.")
+            # Convert the image to webp format
+            try:
+                image = Image.open(self.best_image)
+                image = image.convert("RGB")
+                webp_path = self.best_image.replace(".jpg", ".webp")
+                image.save(webp_path, "webp")
+                self.best_image = webp_path
+                logger.info(f"Converted image saved as {self.best_image}")
+            except Exception as e:
+                logger.error(f"Error converting image to webp: {e}")
+                return False
+
+        save_path = f"{self.today}/best_sunset.webp"
         # Placeholder for S3 saving logic
         logger.info(f"Saving best image to S3 at {save_path}")
         if not self.best_image:
@@ -236,8 +255,8 @@ class SunsetDetector:
 
             # upload metadata to s3
             metadata_path = f"{DIR}/tmp/{self.today}/metadata.json"
-            if not os.path.exists(os.path.dirname(f"tmp/{self.today}")):
-                os.makedirs(os.path.dirname(f"tmp/{self.today}"))
+            if not os.path.exists(os.path.dirname(f"{DIR}/tmp/{self.today}")):
+                os.makedirs(os.path.dirname(f"{DIR}/tmp/{self.today}"))
 
             with open(metadata_path, "w") as f:
                 json.dump(self.metadata, f, indent=4)
@@ -279,6 +298,77 @@ class SunsetDetector:
         normalized_scores = {k: float(v) for k, v in self.scores.items()}
         return sorted(normalized_scores.items(), key=lambda x: x[1], reverse=True)
 
+    def update_metadata(self) -> None:
+        """
+        update metadata
+        * scores for new run
+        * best image path
+        """
+
+        # Download existing metadata from S3 if it exists
+        s3_metadata_path = "scores.json"
+        local_metadata_path = f"{DIR}/tmp/scores.json"
+
+        # convert time in "%Y%m%d_%H%M" to minutes before or after self.sunset_time
+        # Create a new metadata structure with time till sunset as keys
+        time_based_scores = {}
+        for image, score in self.scores.items():
+            timestamp_str = image.split(".")[0]  # Remove file extension
+            timestamp = datetime.strptime(timestamp_str, "%Y%m%d_%H%M")
+            sunset_time = datetime.strptime(self.sunset_time, "%Y-%m-%d_%H:%M:%S")
+            minutes_diff = (timestamp - sunset_time).total_seconds() / 60
+            # TODO change if take photos at different times
+            # round to closest 5 minutes
+            minutes_diff = round(minutes_diff / 5) * 5  # Round to nearest 5 minutes
+
+            time_based_scores[int(minutes_diff)] = float(score)
+
+        new_metadata = {
+            self.today: {
+                "scores": time_based_scores,
+                "max_score": max(self.scores.values(), default=0.0),
+            }
+        }
+
+        try:
+            download_from_s3(s3_metadata_path, local_metadata_path)
+            logger.info(f"Existing metadata found in S3 at {s3_metadata_path}")
+
+            with open(local_metadata_path, "r") as f:
+                existing_metadata = json.load(f)
+
+            # Add new scores to existing metadata
+            existing_metadata[self.today] = {
+                "scores": time_based_scores,
+                "max_score": max(time_based_scores.values(), default=0.0),
+            }
+
+            # Write updated metadata back to file
+            with open(local_metadata_path, "w") as f:
+                json.dump(existing_metadata, f, indent=4)
+
+            # Upload updated metadata back to S3
+            upload_to_s3(local_metadata_path, s3_object=s3_metadata_path)
+
+            logger.info("Updated metadata uploaded to S3 successfully.")
+
+            return True
+        except Exception as e:
+            logger.error(f"Error downloading metadata from S3: {e}")
+
+        # If no existing metadata, create a new one
+        if not os.path.exists(local_metadata_path):
+            logger.info("No existing metadata found, creating new metadata.")
+            with open(local_metadata_path, "w") as f:
+                json.dump({}, f, indent=4)
+
+            with open(local_metadata_path, "w") as f:
+                json.dump(new_metadata, f, indent=4)
+
+            upload_to_s3(local_metadata_path, s3_object=s3_metadata_path)
+
+            return True
+
     def run(self) -> bool:
         """
         Run the sunset detection process.
@@ -297,7 +387,14 @@ class SunsetDetector:
             logger.error("Failed to save the best sunset image.")
             return False
 
+        self.update_metadata()
+        logger.info("Updated metadata.")
+
+        # Clean up temporary files
+        # TODO implement tmp_cleanup
+        # tmp_cleanup(tmp_dir=DIR / "tmp/")
+        # logger.info("Temporary files cleaned up.")
+
         logger.info("Sunset detection and saving completed successfully.")
-        tmp_cleanup
 
         return True
