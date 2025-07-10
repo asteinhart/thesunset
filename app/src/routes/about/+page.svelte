@@ -68,6 +68,20 @@
 					minutes after the sunset for a total of 20 images. I save these locally on the microSD
 					card on the Raspberry Pi.
 				</p>
+				<p>
+					An aside. Holy shit was the Raspberry Pi a pain to get set up. A friend found one on the
+					street and gave it to me so at least it was free. A short chronocile of my woes follows:
+					Try to us SD card included, Raspberry Pi is now 5GB but Sd card it only 4GB. Get new SD
+					card. Plug in try to ssh in, nothing happens. Try to hook up to monitor, confirm
+					everything is working (yay). but realize i need to log in the first time. Track down usb
+					keyboard to log in. Try to connect to WIFI and realize you have an old Raspberry Pi that
+					does not have WIFI adapter included. Realize your kit includes one. It connects to WIFI
+					for two minutes and then gets too hot and stops working. Get new WIFI adapter. Connect to
+					WIFI (yay). Generate ssh key for GitHub and clone repo (yay easy). Try to get UV working.
+					Realize Raspberry Pi does not play nice. Eventually give up and just use venv. Have issue
+					with new vernon of Python Imaging Library (PIL) called pillow, which seems to be a known
+					issue. Find fix.
+				</p>
 			</div>
 
 			<div class="subsection">2. Score each snapshot and save the best image</div>
