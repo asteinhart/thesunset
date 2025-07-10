@@ -1,87 +1,39 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as d3 from 'd3';
-	import { currentDate } from '../store';
+	import { currentDate, scores } from '../store';
 	import { format } from 'date-fns';
+	import { s3Prefix } from '../utils';
 
 	let svgElement: any;
 	let tooltip: any;
 	let containerElement: HTMLDivElement;
-	let selectedDate = $derived(format($currentDate, 'MM-dd-yyyy'));
-	const data = [
-		{
-			date: '07-01-2025',
-			values: [10, 15, 20, 25, 35, 45, 50, 60, 75, 85, 80, 70, 60, 45, 35, 25, 15]
-		},
-		{
-			date: '07-02-2025',
-			values: [8, 12, 15, 20, 25, 55, 65, 75, 85, 90, 85, 75, 65, 50, 35, 20, 12]
-		},
-		{
-			date: '07-03-2025',
-			values: [15, 20, 30, 35, 40, 35, 40, 50, 65, 70, 75, 80, 70, 60, 50, 40, 25]
-		},
-		{
-			date: '07-04-2025',
-			values: [12, 18, 25, 30, 42, 55, 68, 78, 88, 92, 87, 75, 62, 48, 32, 22, 15]
-		},
-		{
-			date: '07-05-2025',
-			values: [20, 25, 28, 35, 45, 52, 60, 72, 82, 88, 85, 78, 65, 52, 38, 28, 18]
-		},
-		{
-			date: '07-06-2025',
-			values: [5, 8, 12, 18, 28, 38, 48, 62, 75, 85, 82, 70, 55, 40, 25, 15, 8]
-		},
-		{
-			date: '07-07-2025',
-			values: [18, 22, 28, 32, 40, 48, 58, 68, 78, 85, 80, 72, 60, 45, 32, 25, 18]
-		},
-		{
-			date: '07-08-2025',
-			values: [14, 18, 24, 30, 38, 46, 56, 66, 76, 82, 78, 68, 56, 42, 30, 20, 14]
-		},
-		{
-			date: '07-09-2025',
-			values: [16, 20, 26, 34, 44, 54, 64, 74, 84, 90, 86, 76, 64, 50, 36, 26, 16]
-		},
-		{
-			date: '07-10-2025',
-			values: [22, 28, 34, 40, 48, 58, 68, 78, 88, 94, 90, 82, 70, 56, 42, 30, 22]
-		},
-		{
-			date: '07-11-2025',
-			values: [12, 16, 22, 28, 36, 46, 56, 66, 76, 86, 82, 74, 62, 48, 34, 24, 16]
-		},
-		{
-			date: '07-12-2025',
-			values: [24, 30, 36, 42, 50, 60, 70, 80, 90, 96, 92, 84, 72, 58, 44, 32, 24]
-		},
-		{
-			date: '07-13-2025',
-			values: [8, 12, 18, 24, 32, 42, 52, 62, 72, 82, 78, 70, 58, 44, 30, 20, 12]
-		}
-	];
+	let selectedDate = $derived(format($currentDate, 'yyyy-MM-dd'));
 
-	const xValues = [-16, -14, -12, -10, -8, -6, -4, -2, 0, 2, 4, 6, 8, 10, 12, 14, 16];
+	const xValues = [-20, -15, -10, -5, 0, 5, 10, 15, 20];
+
+	let prepData = Object.entries($scores).map(([key, item]) => ({
+		date: key,
+		values: xValues.map((timeKey) => item.scores[timeKey] || 0)
+	}));
+
+	console.log(prepData);
+
+	let yMax = $derived(Math.max(...prepData.flatMap((d) => d.values)));
+	let yMin = $derived(Math.min(...prepData.map((d) => Math.max(...d.values))));
+
+	$inspect(yMax, yMin);
 	const xLabels = [
-		'-16min',
-		'-14min',
-		'-12min',
+		'-20min',
+		'-15min',
 		'-10min',
-		'-8min',
-		'-6min',
-		'-4min',
-		'-2min',
+		'-10min',
+		'-5min',
 		'Sunset',
-		'+2min',
-		'+4min',
-		'+6min',
-		'+8min',
+		'+5min',
 		'+10min',
-		'+12min',
-		'+14min',
-		'+16min'
+		'+15min',
+		'+20min'
 	];
 
 	onMount(() => {
@@ -162,24 +114,19 @@
 		const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
 		// Scales
-		const xScale = d3.scaleLinear().domain([-16, 16]).range([0, width]);
+		const xScale = d3.scaleLinear().domain([-20, 20]).range([0, width]);
 
-		const yScale = d3.scaleLinear().domain([0, 100]).range([height, 0]);
-
-		// Color interpolation for sunset theme
-		const maxValues = data.map((d) => d3.max(d.values) || 0);
-		const minValue = d3.min(maxValues) || 0;
-		const maxValue = d3.max(maxValues) || 100;
+		const yScale = d3.scaleLinear().domain([0, yMax]).range([height, 0]);
 
 		const colorScale = d3
 			.scaleLinear<string>()
-			.domain([minValue, maxValue])
+			.domain([yMin, yMax])
 			.range(['#fdf29a', '#fb918f']) // yellow to red
 			.interpolate(d3.interpolateHsl); // Use HSL for better color transitions
 
 		// X axis - only show specific labels
-		const displayTicks = [-16, -10, -4, 0, 4, 10, 16];
-		const displayLabels = ['-16min', '-10', '-4', 'Sunset', '+4', '+10', '+16'];
+		const displayTicks = [-15, -10, -5, 0, 5, 10, 15];
+		const displayLabels = ['-15min', '-10', '-5', 'Sunset', '+5', '+10', '+15'];
 
 		g.append('g')
 			.attr('transform', `translate(0,${height})`)
@@ -227,7 +174,7 @@
 
 		// Draw lines
 		g.selectAll('.line')
-			.data(data)
+			.data(prepData)
 			.enter()
 			.append('g')
 			.attr('class', 'line-group')
@@ -251,6 +198,7 @@
 					.attr('fill', 'none')
 					.attr('stroke', () => {
 						const maxVal = d3.max(d.values) || 0;
+						console.log(maxVal, selectedDate);
 						return d.date === selectedDate ? colorScale(maxVal as number) : 'grey';
 					})
 					.attr('stroke-width', d.date === selectedDate ? 5 : 2)
@@ -283,7 +231,7 @@
 			})
 			.on('click', function (event, d) {
 				// Update selected date
-				currentDate.set(new Date(d.date));
+				currentDate.set(new Date(d.date + 'T00:00:00'));
 				// Re-render the graph with the new selected date
 				svg
 					.selectAll('.line-visible')

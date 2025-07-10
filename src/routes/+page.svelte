@@ -6,13 +6,49 @@
 	import Graph from '$lib/components/Graph.svelte';
 	import Highlights from '$lib/components/Highlights.svelte';
 
-	import { getSunsetImage, formatDate } from '$lib/utils';
+	import { getSunsetImage, formatDate, getScores } from '$lib/utils';
 	import { onMount } from 'svelte';
-	import { currentDate } from '$lib/store';
+	import { currentDate, scores } from '$lib/store';
 	import { format } from 'date-fns';
+
+	// Initialize scores on mount
+	onMount(async () => {
+		const data = await getScores();
+		scores.set(data);
+	});
 
 	let sunsetDate = $state(formatDate($currentDate));
 	let sunsetImage = $derived.by(() => getSunsetImage(sunsetDate));
+
+	let dateMeta = $derived(
+		Object.fromEntries(Object.entries($scores).filter(([key, _]) => key === sunsetDate))
+	);
+
+	let currentSunsetTime = $derived.by(() => {
+		let time = '';
+		if (dateMeta[sunsetDate]) {
+			time = dateMeta[sunsetDate].best_image_time;
+		}
+		return time + ' ' + format($currentDate, 'EEEE, MMMM do, yyyy');
+	});
+
+	let timing = $derived.by(() => {
+		if (!dateMeta[sunsetDate]) {
+			return '';
+		} else if (dateMeta[sunsetDate].min_to_sunset > 0) {
+			return `Peak ${dateMeta[sunsetDate].min_to_sunset} minutes after the Sunset`;
+		} else if (dateMeta[sunsetDate].min_to_sunset < 0) {
+			return `Peak ${Math.abs(dateMeta[sunsetDate].min_to_sunset)} minutes before the Sunset`;
+		} else if (dateMeta[sunsetDate].min_to_sunset === 0) {
+			return 'Peak was exacty at the Sunset';
+		}
+	});
+
+	$inspect('scores', $scores);
+
+	$inspect('currentDate', $currentDate);
+	$inspect('dateMeta', dateMeta);
+	$inspect('currentSunsetTime', currentSunsetTime);
 
 	$effect(() => {
 		// Update the sunset date whenever the current date changes
@@ -21,24 +57,6 @@
 	});
 
 	let active = $state<'calendar' | 'chart' | null>('calendar');
-
-	// let currentSunsetTime = $derived(() => {
-	// 	const date = new Date(sunsetDate);
-	// 	return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-	// });
-	let currentSunsetTime = $state('8:35pm Tuesday, July 5th, 2025');
-
-	// let timing = $derived(() => {
-	// 	const date = new Date(sunsetDate);
-	// 	return `Sunset on ${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-	// });
-	let timing = $state('Peak 12 minutes after the Sunset');
-
-	//let testCurrentDate = $derived(format($currentDate, 'MM-dd-yyyy'));
-
-	$inspect('currnetDate', $currentDate);
-	$inspect('sunset date', $currentDate);
-	$inspect('path', sunsetImage);
 </script>
 
 <Header />

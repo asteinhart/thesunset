@@ -99,10 +99,6 @@
 		currentDate.set(new Date(`${y}-${m_str}-${d_str}T12:00:00`));
 	}
 
-	$inspect(selectedMonth, selectedYear);
-	$inspect(selectedFullDate);
-	$inspect($currentDate);
-
 	/**
 	 * Lifecycle methods
 	 */
