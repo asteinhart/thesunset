@@ -1,4 +1,3 @@
-
 from PIL import Image
 from pathlib import Path
 import os
@@ -204,11 +203,13 @@ class SunsetDetector:
                 image.save(webp_path, "webp")
                 self.best_image = webp_path
                 logger.info(f"Converted image saved as {self.best_image}")
+                ext = "wbep"
             except Exception as e:
                 logger.error(f"Error converting image to webp: {e}")
+                ext = "jpg"
                 return False
 
-        save_path = f"{self.today}/best_sunset.webp"
+        save_path = f"{self.today}/best_sunset.{ext}"
         # Placeholder for S3 saving logic
         logger.info(f"Saving best image to S3 at {save_path}")
         if not self.best_image:
