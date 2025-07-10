@@ -19,7 +19,7 @@ def capture_images(
     Capture images around sunset time with a given
     """
 
-    today = start_time.strftime("%Y%m%d")
+    today = start_time.strftime("%Y-%m-%d")
 
     os.makedirs(export_path / today, exist_ok=True)
 
@@ -36,4 +36,3 @@ def capture_images(
                 time.sleep(frequency)
 
     return True
-
