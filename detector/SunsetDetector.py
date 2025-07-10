@@ -389,11 +389,6 @@ class SunsetDetector:
         self.update_metadata()
         logger.info("Updated metadata.")
 
-        # Clean up temporary files
-        # TODO implement tmp_cleanup
-        # tmp_cleanup(tmp_dir=DIR / "tmp/")
-        # logger.info("Temporary files cleaned up.")
-
         logger.info("Sunset detection and saving completed successfully.")
 
         return True
