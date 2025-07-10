@@ -1,7 +1,7 @@
 from datetime import datetime
 import time
 
-from picamera import PiCamera
+from picamera2 import PiCamera2
 from pathlib import Path
 import os
 
@@ -24,12 +24,15 @@ def capture_images(
     os.makedirs(export_path / today, exist_ok=True)
 
     if source == "rpi":
-        with PiCamera() as camera:
-            camera.resolution = (1024, 768)
+        with PiCamera2() as camera:
+            camera.configure(
+                camera.create_still_configuration(main={"size": (3280, 2464)})
+            )
+            camera.start()
             while datetime.now() < end_time:
                 if datetime.now() >= start_time:
                     timestamp = datetime.now().strftime("%Y%m%d_%H%M")
-                    camera.capture(export_path / f"{timestamp}.jpg")
+                    camera.capture_file(export_path / today / f"{timestamp}.jpg")
                 time.sleep(frequency)
 
     return True
