@@ -302,6 +302,7 @@ class SunsetDetector:
         update metadata
         * scores for new run
         * best image path
+        * time of sunset
         """
 
         # Download existing metadata from S3 if it exists
@@ -322,10 +323,22 @@ class SunsetDetector:
 
             time_based_scores[int(minutes_diff)] = float(score)
 
+        best_image_time = datetime.strptime(
+            self.best_image.split("/")[-1].split(".")[0], "%Y%m%d_%H%M"
+        )
+
+        best_image_time_fmt = best_image_time.strftime("%I:%M %p")
+        min_to_sunset = (
+            best_image_time - datetime.strptime(self.sunset_time, "%Y-%m-%d_%H:%M:%S")
+        ).total_seconds() / 60
+        min_to_sunset = round(min_to_sunset)
+
         new_metadata = {
             self.today: {
                 "scores": time_based_scores,
                 "max_score": max(self.scores.values(), default=0.0),
+                "best_image_time": best_image_time_fmt,
+                "min_to_sunset": min_to_sunset,
             }
         }
 
@@ -337,10 +350,7 @@ class SunsetDetector:
                 existing_metadata = json.load(f)
 
             # Add new scores to existing metadata
-            existing_metadata[self.today] = {
-                "scores": time_based_scores,
-                "max_score": max(time_based_scores.values(), default=0.0),
-            }
+            existing_metadata[self.today] = new_metadata[self.today]
 
             # Write updated metadata back to file
             with open(local_metadata_path, "w") as f:
