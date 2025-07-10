@@ -207,7 +207,6 @@ class SunsetDetector:
             except Exception as e:
                 logger.error(f"Error converting image to webp: {e}")
                 ext = "jpg"
-                return False
 
         save_path = f"{self.today}/best_sunset.{ext}"
         # Placeholder for S3 saving logic
