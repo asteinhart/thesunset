@@ -108,66 +108,66 @@ class SunsetDetector:
 
         return average_r
 
-    def _sunset_detector_cv2(self, image: Path) -> float:
-        """
-        Detects if an image likely depicts a sunset based on color analysis.
-        """
+    # def _sunset_detector_cv2(self, image: Path) -> float:
+    #     """
+    #     Detects if an image likely depicts a sunset based on color analysis.
+    #     """
 
-        try:
-            image = cv2.imread(str(image))
-            if image is None:
-                raise ValueError("Image not found or invalid format.")
-        except Exception as e:
-            logger.error(f"Error reading image: {e}")
-            return 0.0
+    #     try:
+    #         image = cv2.imread(str(image))
+    #         if image is None:
+    #             raise ValueError("Image not found or invalid format.")
+    #     except Exception as e:
+    #         logger.error(f"Error reading image: {e}")
+    #         return 0.0
 
-        hsv_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    #     hsv_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-        # Define color ranges for sunset hues (adjust as needed)
-        lower_red1 = np.array([0, 100, 100])
-        upper_red1 = np.array([10, 255, 255])
-        lower_red2 = np.array([160, 100, 100])
-        upper_red2 = np.array([180, 255, 255])
-        lower_orange = np.array([10, 100, 100])
-        upper_orange = np.array([25, 255, 255])
-        lower_yellow = np.array([25, 100, 100])
-        upper_yellow = np.array([40, 255, 255])
+    #     # Define color ranges for sunset hues (adjust as needed)
+    #     lower_red1 = np.array([0, 100, 100])
+    #     upper_red1 = np.array([10, 255, 255])
+    #     lower_red2 = np.array([160, 100, 100])
+    #     upper_red2 = np.array([180, 255, 255])
+    #     lower_orange = np.array([10, 100, 100])
+    #     upper_orange = np.array([25, 255, 255])
+    #     lower_yellow = np.array([25, 100, 100])
+    #     upper_yellow = np.array([40, 255, 255])
 
-        mask_red1 = cv2.inRange(hsv_img, lower_red1, upper_red1)
-        mask_red2 = cv2.inRange(hsv_img, lower_red2, upper_red2)
-        mask_orange = cv2.inRange(hsv_img, lower_orange, upper_orange)
-        mask_yellow = cv2.inRange(hsv_img, lower_yellow, upper_yellow)
+    #     mask_red1 = cv2.inRange(hsv_img, lower_red1, upper_red1)
+    #     mask_red2 = cv2.inRange(hsv_img, lower_red2, upper_red2)
+    #     mask_orange = cv2.inRange(hsv_img, lower_orange, upper_orange)
+    #     mask_yellow = cv2.inRange(hsv_img, lower_yellow, upper_yellow)
 
-        combined_mask = mask_red1 + mask_red2 + mask_orange + mask_yellow
+    #     combined_mask = mask_red1 + mask_red2 + mask_orange + mask_yellow
 
-        # Calculate the percentage of sunset-colored pixels
-        sunset_pixel_count = np.sum(combined_mask > 0)
-        total_pixels = image.shape[0] * image.shape[1]
-        sunset_percentage = sunset_pixel_count / total_pixels
-        logger.debug(f"Sunset pixel percentage: {sunset_percentage:.2%}")
+    #     # Calculate the percentage of sunset-colored pixels
+    #     sunset_pixel_count = np.sum(combined_mask > 0)
+    #     total_pixels = image.shape[0] * image.shape[1]
+    #     sunset_percentage = sunset_pixel_count / total_pixels
+    #     logger.debug(f"Sunset pixel percentage: {sunset_percentage:.2%}")
 
-        return sunset_percentage
+    #     return sunset_percentage
 
-    def _sunset_detector_saturation(self, image: Path) -> float:
-        """
-        Detects the saturation of an image to determine if it likely depicts a sunset.
-        Higher saturation indicates more vivid colors, which is typical for sunsets.
+    # def _sunset_detector_saturation(self, image: Path) -> float:
+    #     """
+    #     Detects the saturation of an image to determine if it likely depicts a sunset.
+    #     Higher saturation indicates more vivid colors, which is typical for sunsets.
 
-        :param image_path: Path to the image file
-        :return: A float score indicating the saturation level
-        """
-        try:
-            image = cv2.imread(str(image))
-            if image is None:
-                raise ValueError("Image not found or invalid format.")
-        except Exception as e:
-            logger.error(f"Error reading image: {e}")
-            return 0.0
+    #     :param image_path: Path to the image file
+    #     :return: A float score indicating the saturation level
+    #     """
+    #     try:
+    #         image = cv2.imread(str(image))
+    #         if image is None:
+    #             raise ValueError("Image not found or invalid format.")
+    #     except Exception as e:
+    #         logger.error(f"Error reading image: {e}")
+    #         return 0.0
 
-        # Read the image and convert to HSV to analyze
-        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-        saturation = np.mean(hsv[:, :, 1])
-        return saturation  # Higher = more vivid colors
+    #     # Read the image and convert to HSV to analyze
+    #     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    #     saturation = np.mean(hsv[:, :, 1])
+    #     return saturation  # Higher = more vivid colors
 
     def change_detect_method(self, detect_method: str) -> None:
         """
