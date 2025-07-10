@@ -1,6 +1,6 @@
 import schedule
 import time
-from datetime import timedelta
+from datetime import timedelta, datetime
 import os
 from pathlib import Path
 
@@ -12,20 +12,27 @@ from utils import determine_start_end_time, tmp_cleanup
 DIR = Path(__file__).parent.resolve()
 
 
-def run(take_image: bool = True) -> bool:
+def run(take_image: bool = True, testing: bool = False) -> bool:
     logger.info("Running thesunset")
     start_time, sunset, end_time = determine_start_end_time(when="today")
 
     logger.info(
         f"Sunset is at {sunset}. Taking pictures from {start_time} to {end_time}"
     )
+
+    if testing:
+        logger.info("TESTING: running now")
+        start_time = datetime.now() + timedelta(seconds=5)
+        end_time = start_time + timedelta(minutes=1)
+        logger.info(f"Testing mode: Taking pictures from {start_time} to {end_time}")
+
     if take_image:
         logger.info("Taking pictures")
         if not os.path.exists(DIR / "tmp"):
             os.makedirs(DIR / "tmp")
         capture_images(
             source="rpi",
-            frequency=120,
+            frequency=10 if testing else 300,
             export_path=DIR / "tmp",
             start_time=start_time,
             end_time=end_time,
@@ -37,9 +44,13 @@ def run(take_image: bool = True) -> bool:
     detector = SunsetDetector(images=DIR / "tmp")
     detector.run()
 
-    tmp_cleanup(tmp_dir=DIR / "tmp")
+    # Clean up temporary files
+    if not testing:
+        logger.info("Cleaning up temporary files")
+        tmp_cleanup(tmp_dir=DIR / "tmp/")
+        logger.info("Temporary files cleaned up.")
 
-    schedule_next_run()
+    schedule_next_run(testing=testing)
 
 
 def schedule_next_run(testing: bool = False) -> bool:
@@ -59,14 +70,20 @@ def schedule_next_run(testing: bool = False) -> bool:
         run
     )
     logger.info(
-        f"Scheduled next run at {(start_time - timedelta(minutes=1)).strftime("%H:%M")}"
+        f"Scheduled next run at {(start_time - timedelta(minutes=1)).strftime('%H:%M')}"
     )
 
     return True
 
 
-def main():
-    schedule_next_run()
+def main(testing: bool = False) -> None:
+
+    if testing:
+        # Run immediately for testing purposes
+        logger.info("Running thesunset immediately for testing")
+        schedule_next_run(testing=True)
+    else:
+        schedule_next_run()
 
     while True:
         logger.info("Checking for scheduled runs...")
