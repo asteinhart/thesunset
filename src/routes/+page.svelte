@@ -6,7 +6,7 @@
 	import Graph from '$lib/components/Graph.svelte';
 	import Highlights from '$lib/components/Highlights.svelte';
 
-	import { getSunsetImage, formatDate } from '$lib/utils.ts';
+	import { getSunsetImage, formatDate } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { currentDate } from '$lib/store';
 	import { format } from 'date-fns';

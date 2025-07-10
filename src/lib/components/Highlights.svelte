@@ -2,7 +2,7 @@
 	import { getSunsetImage } from '../utils';
 	import { format } from 'date-fns';
 	import { currentDate } from '$lib/store';
-	import { formatDate } from '$lib/utils.ts';
+	import { formatDate } from '$lib/utils';
 
 	// Sample highlight dates - you can make this dynamic later
 	const highlights = [
