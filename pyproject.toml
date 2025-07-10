@@ -8,7 +8,7 @@ dependencies = [
     "astral>=3.2",
     "boto3>=1.38.42",
     "ipython>=9.3.0",
-    "pillow>=11.2.1",
+    "opencv-python>=4.12.0.88",
     "pytz>=2025.2",
     "schedule>=1.2.2",
 ]
