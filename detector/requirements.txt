@@ -1,0 +1,11 @@
+astral==3.2
+boto3==1.39.4
+botocore==1.39.4
+jmespath==1.0.1
+pillow==11.3.0
+python-dateutil==2.9.0.post0
+pytz==2025.2
+s3transfer==0.13.0
+schedule==1.2.2
+six==1.17.0
+urllib3==2.5.0

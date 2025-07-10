@@ -1,7 +1,7 @@
 from datetime import datetime
 import time
 
-from picamera2 import PiCamera2
+from picamera2 import Picamera2
 from pathlib import Path
 import os
 
@@ -12,7 +12,7 @@ def capture_images(
     start_time: datetime,
     end_time: datetime,
     source: str = "rpi",
-    frequency: int = 300,
+    frequency: int = 2,
     export_path: Path = DIR / "tmp",
 ) -> bool:
     """
@@ -24,7 +24,7 @@ def capture_images(
     os.makedirs(export_path / today, exist_ok=True)
 
     if source == "rpi":
-        with PiCamera2() as camera:
+        with Picamera2() as camera:
             camera.configure(
                 camera.create_still_configuration(main={"size": (3280, 2464)})
             )
@@ -36,3 +36,4 @@ def capture_images(
                 time.sleep(frequency)
 
     return True
+

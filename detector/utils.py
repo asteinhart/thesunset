@@ -1,6 +1,4 @@
 import PIL
-import cv2
-import matplotlib.pyplot as plt
 from astral import LocationInfo
 from astral.sun import sun
 from datetime import datetime
@@ -9,7 +7,6 @@ import os
 import shutil
 import boto3
 from datetime import datetime, timedelta
-import numpy as np
 from botocore.exceptions import NoCredentialsError
 from env import (
     AWS_ACCESS_KEY,
@@ -89,7 +86,7 @@ def download_from_s3(
     return False
 
 
-def cv2_resize_image(image_path: str, target_size: tuple) -> np.ndarray:
+def cv2_resize_image(image_path: str, target_size: tuple):
     """
     Resize an image to the target size while maintaining aspect ratio using cv2.
 
@@ -100,10 +97,11 @@ def cv2_resize_image(image_path: str, target_size: tuple) -> np.ndarray:
     Returns:
         numpy.ndarray: The resized image as a cv2 image.
     """
+    return True
     # Read the image using cv2
-    image = cv2.imread(image_path)
-    if image is None:
-        raise ValueError(f"Could not read image at {image_path}")
+   # image = cv2.imread(image_path)
+   # if image is None:
+    #    raise ValueError(f"Could not read image at {image_path}")
 
     height, width = image.shape[:2]
     target_width, target_height = target_size
