@@ -52,10 +52,10 @@ def run(take_image: bool = True, testing: bool = False) -> bool:
         tmp_cleanup(tmp_dir=DIR / "tmp/")
         logger.info("Temporary files cleaned up.")
 
-    schedule_next_run(testing=testing)
+    schedule_next_run(when="tomorrow")
 
 
-def schedule_next_run(testing: bool = False) -> bool:
+def schedule_next_run(when: str = "tomorrow", testing: bool = False) -> bool:
 
     if testing:
         logger.info("testing. scheduling run for 5 seconds")
@@ -63,7 +63,7 @@ def schedule_next_run(testing: bool = False) -> bool:
         schedule.every(5).seconds.do(run)
         return True
 
-    start_time, sunset, end_time = determine_start_end_time(when="tomorrow")
+    start_time, sunset, end_time = determine_start_end_time(when=when)
     logger.info(
         f"The sunset tomorrow is at {sunset}. Taking pictures from {start_time} to {end_time}"
     )
@@ -85,7 +85,7 @@ def main(testing: bool = False) -> None:
         logger.info("Running thesunset immediately for testing")
         schedule_next_run(testing=True)
     else:
-        schedule_next_run()
+        schedule_next_run(when="today")
 
     while True:
         logger.info("Checking for scheduled runs...")
