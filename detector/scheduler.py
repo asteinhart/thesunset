@@ -12,7 +12,7 @@ from utils import determine_start_end_time, tmp_cleanup
 DIR = Path(__file__).parent.resolve()
 
 
-def run(take_image: bool = True, testing: bool = True) -> bool:
+def run(take_image: bool = True, testing: bool = False) -> bool:
     logger.info("Running thesunset")
     start_time, sunset, end_time = determine_start_end_time(when="today")
 
@@ -78,7 +78,7 @@ def schedule_next_run(testing: bool = False) -> bool:
     return True
 
 
-def main(testing: bool = True) -> None:
+def main(testing: bool = False) -> None:
 
     if testing:
         # Run immediately for testing purposes

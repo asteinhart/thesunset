@@ -6,7 +6,6 @@ from datetime import date, datetime
 from utils import find_sunset_time, upload_to_s3, tmp_cleanup
 import json
 from utils import download_from_s3
-import tempfile
 
 DIR = Path(__file__).parent.resolve()
 
