@@ -22,7 +22,9 @@ def run(take_image: bool = True, testing: bool = False) -> bool:
 
     if testing:
         logger.info("TESTING: running now")
-        start_time = datetime.now() + timedelta(seconds=5)
+        start_time = datetime.now(tz=datetime.now().astimezone().tzinfo) + timedelta(
+            seconds=5
+        )
         end_time = start_time + timedelta(minutes=1)
         logger.info(f"Testing mode: Taking pictures from {start_time} to {end_time}")
 

@@ -29,9 +29,11 @@ def capture_images(
                 camera.create_still_configuration(main={"size": (3280, 2464)})
             )
             camera.start()
-            while datetime.now() < end_time:
-                if datetime.now() >= start_time:
-                    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+            while datetime.now(tz=datetime.now().astimezone().tzinfo) < end_time:
+                if datetime.now(tz=datetime.now().astimezone().tzinfo) >= start_time:
+                    timestamp = datetime.now(
+                        tz=datetime.now().astimezone().tzinfo
+                    ).strftime("%Y%m%d_%H%M")
                     camera.capture_file(export_path / today / f"{timestamp}.jpg")
                 time.sleep(frequency)
 
