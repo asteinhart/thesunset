@@ -25,7 +25,7 @@ def run(take_image: bool = True, testing: bool = False) -> bool:
         start_time = datetime.now(tz=datetime.now().astimezone().tzinfo) + timedelta(
             seconds=5
         )
-        end_time = start_time + timedelta(minutes=1)
+        end_time = start_time + timedelta(minutes=2)
         logger.info(f"Testing mode: Taking pictures from {start_time} to {end_time}")
 
     if take_image:
@@ -34,7 +34,7 @@ def run(take_image: bool = True, testing: bool = False) -> bool:
             os.makedirs(DIR / "tmp")
         capture_images(
             source="rpi",
-            frequency=10 if testing else 300,
+            frequency=31 if testing else 300,
             export_path=DIR / "tmp",
             start_time=start_time,
             end_time=end_time,
@@ -43,7 +43,7 @@ def run(take_image: bool = True, testing: bool = False) -> bool:
     logger.info(
         f"Finished taking pictures, running SunsetDetector on images in {DIR / 'tmp'}"
     )
-    detector = SunsetDetector(images=DIR / "tmp")
+    detector = SunsetDetector(images=DIR / "tmp" / str(start_time.date()))
     detector.run()
 
     # Clean up temporary files

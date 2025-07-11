@@ -66,6 +66,11 @@ class SunsetDetector:
 
         logger.info(f"Found {len(image_paths)} images in {self.images}")
         self.metadata["num_images"] = len(image_paths)
+
+        if len(image_paths) == 0:
+            logger.warning("No images found for sunset detection.")
+            return False
+
         logger.info(
             f"Scoring images for sunset detection using {self.detect.__name__} method."
         )
