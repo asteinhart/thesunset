@@ -69,7 +69,7 @@ def schedule_next_run(testing: bool = False) -> bool:
     )
     schedule.clear()
     schedule.every().day.at((start_time - timedelta(minutes=1)).strftime("%H:%M")).do(
-        run
+        run, testing=testing
     )
     logger.info(
         f"Scheduled next run at {(start_time - timedelta(minutes=1)).strftime('%H:%M')}"
@@ -78,7 +78,7 @@ def schedule_next_run(testing: bool = False) -> bool:
     return True
 
 
-def main(testing: bool = False) -> None:
+def main(testing: bool = True) -> None:
 
     if testing:
         # Run immediately for testing purposes
