@@ -206,7 +206,7 @@ class SunsetDetector:
                 image.save(webp_path, "webp")
                 self.best_image = webp_path
                 logger.info(f"Converted image saved as {self.best_image}")
-                ext = "wbep"
+                ext = "webp"
             except Exception as e:
                 logger.error(f"Error converting image to webp: {e}")
                 ext = "jpg"
