@@ -114,12 +114,12 @@
 				<p class="aside">
 					Start by trying to download the OS on a provided SD card. The Raspberry Pi OS is now 5GB
 					but the old SD card it came with only is 4GB. Get new SD card. Load on the OS. Plug in Pi,
-					try to SSH in, nothing happens. Plug into a monitor to see whats happening. Confirm
+					try to SSH in, nothing happens. Plug into a monitor to see what's happening. Confirm
 					everything is working (yay) but realize you need to log in the first time meaning you need
-					a keyboard. Track down a USB keyboard to log in. Log in (yay). Try to connect to WIFI and
-					realize you have an old Pi that does not have a built in WIFI adapter. Realize your kit
-					includes one. Plug in and connect to WIFI (yay) for two minutes. However, then adapter
-					gets too hot and stops working. Get new WIFI adapter. Connect to WIFI again (yay).
+					a keyboard. Track down a USB keyboard to log in. Log in (yay). Try to connect to WiFi and
+					realize you have an old Pi that does not have a built in WiFi adapter. Realize your kit
+					includes one. Plug in and connect to WiFi (yay) for two minutes. However, then adapter
+					gets too hot and stops working. Get new WiFi adapter. Connect to WiFi again (yay).
 					Generate SSH key for GitHub and clone repo (yay). Try to get UV working. Realize Pi does
 					not play nice with UV. Eventually give up and just use venv. Have issue with new version
 					of Python Imaging Library (PIL) called pillow, which seems to be a known issue. Find fix.
@@ -298,7 +298,14 @@
 					and it works pretty well as is. Once I actually get a digital picture frame, there will be
 					some additional work to figure out how to automate picture uploads and display rotations.
 				</p>
-				<p>That's all for now, maybe I will do an update with an analysis</p>
+				<p>
+					That's all for now. Maybe I will do an update with an analysis once I get a month or two
+					of photos. As always, all my projects are completely open source to check out <a
+						class="link"
+						href="https://github.com/asteinhart/thesunset"
+						target="_blank">the code</a
+					> if you are interested. Thanks for reading!
+				</p>
 			</div>
 		</div>
 		<a href="/" class="sunset-button"> See the latest sunset </a>
@@ -336,6 +343,16 @@
 	.title-block {
 		width: 50%;
 		margin: auto;
+	}
+
+	.link {
+		color: #fba58b;
+		text-decoration: none;
+		font-weight: bold;
+	}
+
+	.link:hover {
+		text-decoration: underline;
 	}
 	.title {
 		font-size: 2.5rem;
