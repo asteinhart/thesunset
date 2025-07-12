@@ -26,8 +26,6 @@
 
 	const cutoffs = $derived(findCutoffs());
 
-	console.log('cutoffs', cutoffs);
-
 	let rows = $state(initRows()),
 		selectedMonth = $state(+format(new Date(), 'MM')),
 		selectedYear = $state(+format(new Date(), 'yyyy')),
