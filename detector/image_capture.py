@@ -2,6 +2,7 @@ from datetime import datetime
 import time
 
 from picamera2 import Picamera2
+from libcamera import controls
 from pathlib import Path
 import os
 
@@ -28,6 +29,8 @@ def capture_images(
             camera.configure(
                 camera.create_still_configuration(main={"size": (3280, 2464)})
             )
+            camera.set_controls({"AwbMode": controls.AwbModeEnum.Daylight})
+
             camera.start()
             while datetime.now(tz=datetime.now().astimezone().tzinfo) < end_time:
                 if datetime.now(tz=datetime.now().astimezone().tzinfo) >= start_time:
