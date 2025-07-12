@@ -10,6 +10,10 @@
 
 <svelte:window bind:innerWidth={windowWidth} />
 
+<svelte:head>
+	<title>About</title>
+</svelte:head>
+
 <main>
 	<Header />
 	<div class="article">
@@ -62,25 +66,30 @@
 			<div class="subsection">1. Take snapshots of the sunset every day</div>
 			<div class="prose">
 				<p>
-					A cron job runs on the Raspberry Pi each day at 4:00pm ET. Using the Python package
-					<code>astral</code>, I check what the time of sunset is and take a picture using a
-					Raspberry Pi every 2 minutes starting 20 minutes before the sunset and continuing for 20
-					minutes after the sunset for a total of 20 images. I save these locally on the microSD
-					card on the Raspberry Pi.
+					Using the Python package <code>astral</code>, I check what the time of sunset is and
+					schedule a Python script to run using the <code>schedule</code> package. The script take a
+					picture using a Raspberry Pi every 2 minutes starting 20 minutes before the sunset and continuing
+					for 20 minutes after the sunset for a total of 9 images. I temporarily save these locally on
+					the SD card on the Raspberry Pi.
 				</p>
 				<p>
-					An aside. Holy shit was the Raspberry Pi a pain to get set up. A friend found one on the
-					street and gave it to me so at least it was free. A short chronocile of my woes follows:
-					Try to us SD card included, Raspberry Pi is now 5GB but Sd card it only 4GB. Get new SD
-					card. Plug in try to ssh in, nothing happens. Try to hook up to monitor, confirm
-					everything is working (yay). but realize i need to log in the first time. Track down usb
-					keyboard to log in. Try to connect to WIFI and realize you have an old Raspberry Pi that
-					does not have WIFI adapter included. Realize your kit includes one. It connects to WIFI
-					for two minutes and then gets too hot and stops working. Get new WIFI adapter. Connect to
-					WIFI (yay). Generate ssh key for GitHub and clone repo (yay easy). Try to get UV working.
-					Realize Raspberry Pi does not play nice. Eventually give up and just use venv. Have issue
-					with new vernon of Python Imaging Library (PIL) called pillow, which seems to be a known
-					issue. Find fix.
+					A short aside. Holy s*** was the Raspberry Pi a pain to get set up. A friend found one on
+					the street and gave it to me so at least it was free. A short chronicle of my woes
+					follows.
+				</p>
+				<p class="aside">
+					Start by trying to download the OS on a provided SD card. The Raspberry Pi OS is now 5GB
+					but the old SD card it came with only is 4GB. Get new SD card. Load on the OS. Plug in Pi,
+					try to SSH in, nothing happens. Plug into a monitor to see whats happening. Confirm
+					everything is working (yay) but realize you need to log in the first time meaning you need
+					a keyboard. Track down a USB keyboard to log in. Log in (yay). Try to connect to WIFI and
+					realize you have an old Pi that does not have a built in WIFI adapter. Realize your kit
+					includes one. Plug in and connect to WIFI (yay) for two minutes. However, then adapter
+					gets too hot and stops working. Get new WIFI adapter. Connect to WIFI again (yay).
+					Generate SSH key for GitHub and clone repo (yay). Try to get UV working. Realize Pi does
+					not play nice with UV. Eventually give up and just use venv. Have issue with new version
+					of Python Imaging Library (PIL) called pillow, which seems to be a known issue. Find fix.
+					Finally get everything working and can run the full script (yay).
 				</p>
 			</div>
 
@@ -223,9 +232,10 @@
 
 				<p>
 					Since the images are stored on S3, I can simply make the bucket public for read access
-					(bots pls ignore) removing the need for any backend and allowing me to host the app on
-					GitHub Pages for free. This was my first time hosting a Svelte app on GitHub pages and I
-					found the process straightforward once I understood the proper build configuration.
+					(bots pls ignore) removing the need for any backend. Thus, I can use a simple Svelte
+					application to display the images and metadata. The Svelte app fetches the images from the
+					S3 bucket and displays it on the page. I still get free credits from Heroku from a
+					previous project, so I am hosting the Svelte app there.
 				</p>
 			</div>
 			<div class="section">Future Work</div>
@@ -257,6 +267,7 @@
 				</p>
 			</div>
 		</div>
+		<a href="/" class="sunset-button"> See the latest sunset </a>
 	</div>
 </main>
 
@@ -264,6 +275,13 @@
 	p {
 		font-family: 'Public Sans', sans-serif;
 		padding-block: 0.5rem;
+	}
+
+	.aside {
+		font-style: italic;
+		color: #555;
+		margin-left: 1rem;
+		font-size: small;
 	}
 	.header {
 		display: flex;

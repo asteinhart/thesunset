@@ -3,55 +3,48 @@
 	import { format, differenceInDays } from 'date-fns';
 
 	import { initRows, fullMonthYear, arrDays, updateRows } from '../datapicker';
-	import { currentDate } from '../store';
+	import { currentDate, scores } from '../store';
 
-	let isActive = false,
-		rows = $state(initRows()),
+	let rows = $state(initRows()),
 		selectedMonth = $state(+format(new Date(), 'MM')),
 		selectedYear = $state(+format(new Date(), 'yyyy')),
 		selectedFullDate = $state(format(new Date(), 'MM-dd-yyyy'));
 
-	// Color dictionary for dates - you can customize this based on your needs
-	const dateColors: Record<string, string> = {
-		// July 2025 with 5 gradient colors between #fb918f and #fdf29a
-		'2025-07-01': 'bg-[#fb918f]',
-		'2025-07-02': 'bg-[#fbb790]',
-		'2025-07-03': 'bg-[#fcbd91]',
-		'2025-07-04': 'bg-[#fcc292]',
-		'2025-07-05': 'bg-[#fcc893]',
-		'2025-07-06': 'bg-[#fcce94]',
-		'2025-07-07': 'bg-[#fcd395]',
-		'2025-07-08': 'bg-[#fcd996]',
-		'2025-07-09': 'bg-[#fcdf97]',
-		'2025-07-10': 'bg-[#fce498]',
-		'2025-07-11': 'bg-[#fcea99]',
-		'2025-07-12': 'bg-[#fcef9a]',
-		'2025-07-13': 'bg-[#fcf59b]',
-		'2025-07-14': 'bg-[#fdfa9c]',
-		'2025-07-15': 'bg-[#fd9f8f]',
-		'2025-07-16': 'bg-[#fbc690]',
-		'2025-07-17': 'bg-[#fccc93]',
-		'2025-07-18': 'bg-[#fcd396]',
-		'2025-07-19': 'bg-[#fcdb97]',
-		'2025-07-20': 'bg-[#fce298]',
-		'2025-07-21': 'bg-[#fce999]',
-		'2025-07-22': 'bg-[#fcf19a]',
-		'2025-07-23': 'bg-[#fcf89b]',
-		'2025-07-24': 'bg-[#fdf29a]',
-		'2025-07-25': 'bg-[#fba78f]',
-		'2025-07-26': 'bg-[#fccf94]',
-		'2025-07-27': 'bg-[#fce097]',
-		'2025-07-28': 'bg-[#fcec99]',
-		'2025-07-29': 'bg-[#fcf69b]',
-		'2025-07-30': 'bg-[#fdf19a]',
-		'2025-07-31': 'bg-[#fdf29a]'
-	};
+	function lookupColor(score: number) {
+		console.log('lookupColor', score);
+		if (score >= 110) {
+			return 'bg-[#fb918f]'; // Red
+		} else if (score >= 0) {
+			return 'bg-[#fbb790]'; // Orange
+		} else {
+			return 'bg-gray-100'; // Default light grey color
+		}
+	}
+
+	function createDateColors($scores: {}): Record<string, string> {
+		const dateColors: Record<string, string> = {};
+		Object.entries($scores).forEach(([date, scoreData]) => {
+			const dateKey = format(new Date(date + 'T00:00:00'), 'yyyy-MM-dd');
+			console.log('check dates', date, dateKey);
+
+			const score = scoreData.max_score || 0;
+			const color = lookupColor(score);
+
+			dateColors[dateKey] = color;
+		});
+		return dateColors;
+	}
+
+	let dateColors = $derived(createDateColors($scores));
 
 	// Function to get color for a specific date
 	function getDateColor(year: number, month: number, day: number): string {
 		const dateKey = `${year}-${padNumber(month)}-${padNumber(day)}`;
 		return dateColors[dateKey] || 'bg-gray-100'; // Default light grey color
 	}
+
+	$inspect('selectedFullDate', selectedFullDate);
+	$inspect('scores', $scores);
 
 	/**
 	 * Navigate months
@@ -124,7 +117,7 @@
 				<div class="w-full">
 					<div class="flex items-center justify-between">
 						<!-- Month year -->
-						<span class="text-lg font-bold text-gray-800 dark:text-gray-200 focus:outline-none"
+						<span class="text-lg font-bold text-black"
 							>{fullMonthYear(selectedMonth, selectedYear)}</span
 						>
 						<div class="flex items-center">
@@ -183,9 +176,7 @@
 									{#each arrDays() as day}
 										<th>
 											<div class="flex justify-center w-full">
-												<p
-													class="text-base font-medium text-center text-gray-700 dark:text-gray-300"
-												>
+												<p class="text-base font-medium text-center">
 													{day}
 												</p>
 											</div>
@@ -229,6 +220,7 @@
 							</tbody>
 						</table>
 					</div>
+					here is something
 				</div>
 			</div>
 		</div>

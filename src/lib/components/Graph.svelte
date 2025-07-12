@@ -22,7 +22,6 @@
 	let yMax = $derived(Math.max(...prepData.flatMap((d) => d.values)));
 	let yMin = $derived(Math.min(...prepData.map((d) => Math.max(...d.values))));
 
-	$inspect(yMax, yMin);
 	const xLabels = [
 		'-20min',
 		'-15min',

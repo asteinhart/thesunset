@@ -46,10 +46,6 @@
 
 	$inspect('scores', $scores);
 
-	$inspect('currentDate', $currentDate);
-	$inspect('dateMeta', dateMeta);
-	$inspect('currentSunsetTime', currentSunsetTime);
-
 	$effect(() => {
 		// Update the sunset date whenever the current date changes
 		sunsetDate = formatDate($currentDate);
@@ -58,6 +54,10 @@
 
 	let active = $state<'calendar' | 'chart' | null>('calendar');
 </script>
+
+<svelte:head>
+	<title>Last Night's Sunset</title>
+</svelte:head>
 
 <Header />
 

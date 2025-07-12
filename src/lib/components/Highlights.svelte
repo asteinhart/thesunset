@@ -28,6 +28,7 @@
 		// Convert the formatted date string to a Date object
 		const [month, day, year] = formattedDate.split('-').map(Number);
 		const clickedDate = new Date(year, month - 1, day); // month is 0-indexed
+		console.log(clickedDate);
 		currentDate.set(clickedDate);
 
 		// Smooth scroll to top
