@@ -298,6 +298,8 @@
 					and it works pretty well as is. Once I actually get a digital picture frame, there will be
 					some additional work to figure out how to automate picture uploads and display rotations.
 				</p>
+				<a href="/" class="sunset-button"> See the latest sunset </a>
+
 				<p>
 					That's all for now. Maybe I will do an update with an analysis once I get a month or two
 					of photos. As always, all my projects are completely open source to check out <a
@@ -308,7 +310,6 @@
 				</p>
 			</div>
 		</div>
-		<a href="/" class="sunset-button"> See the latest sunset </a>
 	</div>
 </main>
 
