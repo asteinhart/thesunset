@@ -347,7 +347,7 @@ class SunsetDetector:
         }
 
         try:
-            download_from_s3(s3_metadata_path, local_metadata_path)
+            download_from_s3(local_metadata_path, s3_metadata_path)
             logger.info(f"Existing metadata found in S3 at {s3_metadata_path}")
 
             with open(local_metadata_path, "r") as f:

@@ -18,9 +18,7 @@ from logger import logger
 DIR = Path(__file__).parent.resolve()
 
 
-def upload_to_s3(
-    local_file: str, bucket: str = "thesunset", s3_object: str = None
-) -> bool:
+def upload_to_s3(local_file: str, s3_object: str, bucket: str = "thesunset") -> bool:
     """
     Upload a file to an S3 bucket using access keys
 
@@ -56,7 +54,9 @@ def upload_to_s3(
 
 
 def download_from_s3(
-    s3_object: str, local_file: str, bucket: str = "thesunset"
+    local_file: str,
+    s3_object: str,
+    bucket: str = "thesunset",
 ) -> bool:
     """
     Download a file from an S3 bucket using access keys
