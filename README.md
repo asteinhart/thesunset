@@ -1,38 +1,36 @@
-# sv
+# Last Night's Sunset 🌅
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+**Never miss the sunset again.** An automated system that captures, scores, and displays the best sunset photo from the previous night using computer vision and a Raspberry Pi.
 
-## Creating a project
+See the project at [thesunset.austinsteinhart.com](thesunset.austinsteinhart.com).
 
-If you're seeing this, you've probably already done this step. Congrats!
 
-```bash
-# create a new project in the current directory
-npx sv create
+## Overview
 
-# create a new project in my-app
-npx sv create my-app
-```
+This project automatically captures sunset photos every day, scores them using computer vision algorithms, selects the best image, and displays it on a beautiful web interface. The system runs on a Raspberry Pi with a camera module and includes a responsive Svelte frontend for viewing sunset data.
 
-## Developing
+## Features
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- **Automated Daily Capture**: Takes photos every 5 minutes from 20 minutes before to 20 minutes after sunset
+- **Computer Vision Scoring**: Uses color analysis and sunset-specific metrics to identify the best photo
+- **Interactive Calendar**: Browse sunset photos by date with color-coded quality indicators
+- **Data Visualization**: D3.js charts showing sunset quality scores over time
+- **Responsive Design**: Mobile-friendly interface with smooth interactions
+- **Cloud Storage**: Automatic upload to AWS S3 with metadata
+- **Highlights Section**: Showcases the best recent sunsets
 
-```bash
-npm run dev
+## Architecture
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+### Backend (Raspberry Pi)
+- **Image Capture**: Python script using `picamera` or `opencv`
+- **Sunset Timing**: `astral` library for accurate sunset calculations
+- **Scheduling**: `schedule` library for automated daily execution
+- **Computer Vision**: `OpenCV` and `Pillow` for image analysis
+- **Cloud Upload**: `boto3` for AWS S3 integration
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+### Frontend (Web App)
+- **Framework**: SvelteKit with TypeScript
+- **Styling**: Custom CSS with responsive design
+- **Data Visualization**: D3.js for interactive charts
+- **Date Handling**: `date-fns` for date formatting and manipulation
+- **Deployment**: Static hosting (Heroku/GitHub Pages)
