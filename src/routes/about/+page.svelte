@@ -11,7 +11,41 @@
 <svelte:window bind:innerWidth={windowWidth} />
 
 <svelte:head>
-	<title>About</title>
+	<title>About the Last Night's Sunset</title>
+	<meta
+		name="description"
+		content="About the Last Night's Sunset project, how it works, and the technologies used."
+	/>
+	<meta
+		name="keywords"
+		content="sunset, photography, computer vision, raspberry pi, daily sunset, automated photography"
+	/>
+	<meta name="author" content="Austin Steinhart" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="theme-color" content="#fba58b" />
+	<meta name="robots" content="index, follow" />
+	<link rel="canonical" href="https://thesunset.austinsteinhart.com/about" />
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:title" content="About the Last Night's Sunset" />
+	<meta
+		property="og:description"
+		content="About the Last Night's Sunset project, how it works, and the technologies used."
+	/>
+	<meta property="og:image" content="https://thesunset.austinsteinhart.com/favicon.png" />
+	<meta property="og:url" content="https://thesunset.austinsteinhart.com/about" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="About the Last Night's Sunset" />
+	<meta property="og:locale" content="en_US" />
+
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="About the Last Night's Sunset" />
+	<meta
+		name="twitter:description"
+		content="Never miss the sunset again. View the best sunset photo from last night, captured automatically with computer vision scoring."
+	/>
+	<meta name="twitter:image" content="https://thesunset.austinsteinhart.com/favicon.png" />
 </svelte:head>
 
 <main>

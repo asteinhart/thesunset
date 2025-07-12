@@ -51,7 +51,7 @@
 		} else if (dateMeta[sunsetDate].min_to_sunset < 0) {
 			return `Peak ${Math.abs(dateMeta[sunsetDate].min_to_sunset)} minutes before the Sunset`;
 		} else if (dateMeta[sunsetDate].min_to_sunset === 0) {
-			return 'Peak was exacty at the Sunset';
+			return 'Peak was exactly at the Sunset';
 		}
 	});
 
@@ -66,6 +66,47 @@
 
 <svelte:head>
 	<title>Last Night's Sunset</title>
+	<meta
+		name="description"
+		content="Never miss the sunset again. View the best sunset photo from last night, captured automatically with computer vision scoring."
+	/>
+	<meta
+		name="keywords"
+		content="sunset, photography, computer vision, raspberry pi, daily sunset, automated photography"
+	/>
+	<meta name="author" content="Austin Steinhart" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="theme-color" content="#fba58b" />
+	<meta name="robots" content="index, follow" />
+	<link rel="canonical" href="https://thesunset.austinsteinhart.com" />
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:title" content="Last Night's Sunset" />
+	<meta
+		property="og:description"
+		content="Never miss the sunset again. View the best sunset photo from last night, captured automatically with computer vision scoring."
+	/>
+	<meta property="og:image" content="https://thesunset.austinsteinhart.com/favicon.png" />
+	<meta property="og:url" content="https://thesunset.austinsteinhart.com" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Last Night's Sunset" />
+	<meta property="og:locale" content="en_US" />
+
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Last Night's Sunset" />
+	<meta
+		name="twitter:description"
+		content="Never miss the sunset again. View the best sunset photo from last night, captured automatically with computer vision scoring."
+	/>
+	<meta name="twitter:image" content="https://thesunset.austinsteinhart.com/favicon.png" />
+
+	<!-- Additional -->
+	<meta name="application-name" content="Last Night's Sunset" />
+	<meta name="apple-mobile-web-app-title" content="Last Night's Sunset" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	<meta name="format-detection" content="telephone=no" />
 </svelte:head>
 
 <Header />

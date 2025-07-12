@@ -5,13 +5,8 @@
 	import { initRows, fullMonthYear, arrDays, updateRows } from '../datapicker';
 	import { currentDate, scores } from '../store';
 
-	$inspect('score', $scores);
-
 	const minMaxScore = $derived(Math.min(...Object.values($scores).map((d) => d.max_score || 0)));
 	const maxMaxScore = $derived(Math.max(...Object.values($scores).map((d) => d.max_score || 0)));
-
-	$inspect('minMaxScore', minMaxScore);
-	$inspect('maxMaxScore', maxMaxScore);
 
 	const findCutoffs = () => {
 		const value = (maxMaxScore - minMaxScore) / 5; // Divide the range into 5 equal parts
