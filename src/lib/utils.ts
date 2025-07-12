@@ -5,7 +5,7 @@
 export const s3Prefix = 'https://thesunset.s3.amazonaws.com';
 
 export function getSunsetImagePath(date: string): string {
-	const path = `${s3Prefix}/${date.substring(0, 4)}-${date.substring(5, 7)}-${date.substring(8, 10)}/best_sunset.jpg`;
+	const path = `${s3Prefix}/${date.substring(0, 4)}-${date.substring(5, 7)}-${date.substring(8, 10)}/best_sunset.webp`;
 	return path;
 }
 
