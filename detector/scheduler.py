@@ -50,10 +50,10 @@ def run(take_image: bool = True, testing: bool = False) -> bool:
     detector.run()
 
     # Clean up temporary files
-    if not testing:
-        logger.info("Cleaning up temporary files")
-        tmp_cleanup(tmp_dir=DIR / "tmp/")
-        logger.info("Temporary files cleaned up.")
+    # if not testing:
+    #     logger.info("Cleaning up temporary files")
+    #     tmp_cleanup(tmp_dir=DIR / "tmp/")
+    #     logger.info("Temporary files cleaned up.")
 
     schedule_next_run(when="tomorrow")
 
