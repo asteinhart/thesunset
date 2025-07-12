@@ -21,7 +21,8 @@ This project automatically captures sunset photos every day, scores them using c
 
 ## Architecture
 
-### Backend (Raspberry Pi)
+### Backend (Raspberry Pi) `/detector`
+- **Python**: Main language for backend logic
 - **Image Capture**: Python script using `picamera` or `opencv`
 - **Sunset Timing**: `astral` library for accurate sunset calculations
 - **Scheduling**: `schedule` library for automated daily execution
