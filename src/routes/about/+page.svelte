@@ -20,7 +20,7 @@
 		<div class="title-block">
 			<div class="title">Never Miss the Sunset Again</div>
 			<div class="subtitle">
-				Using a small camera and some code, enjoy last nights' sunset every day, all day.
+				Using a small camera and some code, enjoy the sunset from last night every day, all day.
 			</div>
 			<p class="byline">By <a href="austinsteinhart.com">Austin Steinhart</a> | Summer 2025</p>
 			<hr class="divider" />
@@ -28,33 +28,33 @@
 		<div class="body">
 			<div class="prose">
 				<p>
-					After missing the sunset one night and only seeing the splendor of it all over Instagram
-					later in the evening, I dreamed up a digital photo frame that displayed the best moment of
-					the sunset from the previous night. Thus, each day the frame showed the best moment of the
-					sunset from the previous night and after the current day's sunset finished, it updated for
-					the next 24 hours with the most current sunset.
+					After missing the sunset one night and only seeing its splendor over Instagram later in
+					the evening, I dreamed up a digital photo frame that displayed the best moment of the
+					sunset from the previous night. The frame would show the best moment of the sunset from
+					the previous night, and after the current day's sunset finished, it would update for the
+					next 24 hours with the most current sunset.
 				</p>
 				<p>
-					A few years and a computer science degree later, this project has come alive. Click below
-					to see the latest sunset or keep reading to learn more about how I made this project come
-					to life.
+					A few years and one computer science degree later, this project has come alive. Click
+					below to see the latest sunset or keep reading to learn more about how I made this project
+					come to life.
 				</p>
 				<a href="/" class="sunset-button"> See the latest sunset </a>
 				<p>With this project, I wanted to:</p>
 				<ul class="list-disc list-inside">
 					<li>Make something I thought was cool</li>
-					<li>Build a full stack* app and not overcomplicate the design</li>
+					<li>Build a full stack app and not overcomplicate the design</li>
 					<li>Learn a few new tools / technologies</li>
 				</ul>
 
 				<p>
-					As someone newer to the engineering world, this was an opportunity to go through a full
-					design and implementation. I look forward to hearing about improvements to the app!
+					As someone new to the engineering world, this was an opportunity to go through full design
+					and implementation. I look forward to hearing about improvements to the app!
 				</p>
 
 				<p>
 					I used some tools I have enjoyed learning (Svelte, AWS), added on a few new ones
-					(TypeScript, Raspberry Pi, OpenCV), and got some more practice writing object oriented
+					(TypeScript, Raspberry Pi, OpenCV), and got some more practice writing object-oriented
 					code.
 				</p>
 			</div>
@@ -67,10 +67,10 @@
 			<div class="prose">
 				<p>
 					Using the Python package <code>astral</code>, I check what the time of sunset is and
-					schedule a Python script to run using the <code>schedule</code> package. The script take a
-					picture using a Raspberry Pi every 2 minutes starting 20 minutes before the sunset and continuing
-					for 20 minutes after the sunset for a total of 9 images. I temporarily save these locally on
-					the SD card on the Raspberry Pi.
+					schedule a Python script to run using the <code>schedule</code> package. The script takes a
+					picture using a Raspberry Pi every 5 minutes starting 20 minutes before sunset and continuing
+					for 20 minutes after sunset for a total of 9 images. I temporarily save these locally on the
+					SD card on the Raspberry Pi.
 				</p>
 				<p>
 					A short aside. Holy s*** was the Raspberry Pi a pain to get set up. A friend found one on
@@ -97,11 +97,11 @@
 			<div class="prose">
 				<p>
 					Using the Python packages <code>Pillow</code> (a fork of the no longer maintained original
-					Python Imaging Library PIL) and <code>OpenCV</code>, I compute a series of metrics from
-					simply what is the average amount of red in every pixel to what is the percentage of
-					pixels that fall within color ranges for sunset hues. This is an area where a machine
-					learning model could possibly be helpful but since we are simply comparing the same scene
-					over time in this project, I believe this simpler approach yields acceptable results.
+					Python Imaging Library PIL) and <code>OpenCV</code>, I compute a series of metrics, from
+					simply the average amount of red in every pixel to the percentage of pixels that fall
+					within color ranges for sunset hues. This is an area where a machine learning model could
+					possibly be helpful, but since I'm simply comparing the same scene over time in this
+					project, I believe this simpler approach yields acceptable results.
 				</p>
 				<p>Let's see some examples.</p>
 			</div>
@@ -201,22 +201,22 @@
 					</div>
 				</div>
 				<p class="diagram-caption">
-					Camera captures images every 5 minutes, from 20 minutes before sunset to 20 minutes after.
+					Camera captures images every 5 minutes from 20 minutes before to 20 minutes after sunset.
 				</p>
 			</div>
 			<div class="prose">
 				<p>
 					After an image is selected, the best image is uploaded to an S3 bucket along with some
 					metadata and the rest of the files are removed from the Raspberry Pi to ensure there are
-					no memory issues down the road. AWS permissions are the trickiest part of an overall
-					simple process, but LLMs are pretty good these days at explaining the process and creating
+					no memory issues down the road. AWS permissions are the trickiest part of an otherwise
+					simple process, but LLMs are quite good these days at explaining the process and creating
 					the permission files needed.
 				</p>
 
 				<p>
-					This project lent itself to an Object Oriented approach. I created a `SunsetDetector`
-					class with adapters to change the scoring and saving methods. Thus, in the future if I
-					want to explore new scoring methods or a different image storing platform, most of the
+					This project lent itself to an object-oriented approach. I created a `SunsetDetector`
+					class with adapters to modify the scoring and saving methods. Therefore, in the future if
+					I want to explore new scoring methods or a different image storing platform, most of the
 					code will stay the same and I will just have to change the underlying scoring and saving
 					function used.
 				</p>
@@ -224,7 +224,7 @@
 			<div class="subsection">3. Single Page Application with Svelte</div>
 			<div class="prose">
 				<p>
-					As a dedicated fan of type hints in Python, this project was a good excuse to finally
+					As someone who loves type hints in Python, this project was a good excuse to finally
 					switch over to TypeScript from JavaScript. I also continued to build my experience with
 					Svelte 5 and spent some extra time learning more about AWS S3 configurations and
 					permissions.
@@ -232,9 +232,9 @@
 
 				<p>
 					Since the images are stored on S3, I can simply make the bucket public for read access
-					(bots pls ignore) removing the need for any backend. Thus, I can use a simple Svelte
+					(bots pls ignore), removing the need for a backend. Therefore, I can use a simple Svelte
 					application to display the images and metadata. The Svelte app fetches the images from the
-					S3 bucket and displays it on the page. I still get free credits from Heroku from a
+					S3 bucket and displays them on the page. I still have free credits from Heroku from a
 					previous project, so I am hosting the Svelte app there.
 				</p>
 			</div>
@@ -244,8 +244,8 @@
 				<ul class="list-disc list-inside ml-4 space-y-2">
 					<li>
 						Explore better methods to determine the "best" sunset. While my simple scoring system
-						works, more sophisticated computer vision techniques or even a machine learning model
-						trained on sunset aesthetics could improve selection quality.
+						works well, more sophisticated computer vision techniques or even a machine learning
+						model trained on sunset aesthetics could improve selection quality.
 					</li>
 					<li>
 						Find collaborators to run the pipeline in different cities and add their images to this
@@ -260,11 +260,11 @@
 				</p>
 
 				<p>
-					However, this was primarily a short passion project to keep me busy before starting a new
-					job, and it works pretty well as is. Once I actually get a digital picture frame, there
-					will be some additional work to figure out how to automate picture uploads and display
-					rotations.
+					However, this was primarily a passion project to keep me busy before starting a new job,
+					and it works pretty well as is. Once I actually get a digital picture frame, there will be
+					some additional work to figure out how to automate picture uploads and display rotations.
 				</p>
+				<p>That's all for now, maybe I will do an update with an analysis</p>
 			</div>
 		</div>
 		<a href="/" class="sunset-button"> See the latest sunset </a>
@@ -362,7 +362,7 @@
 		font-size: 1.5rem;
 		font-weight: bold;
 		margin: auto;
-		margin-top: 2rem;
+		margin-top: 1.5rem;
 		margin-bottom: 0.5rem;
 		width: 50%;
 	}
@@ -372,7 +372,7 @@
 		font-size: 1.2rem;
 		font-weight: bold;
 		margin: auto;
-		margin-top: 2rem;
+		margin-top: 1rem;
 		margin-bottom: 0.2rem;
 		width: 50%;
 	}
