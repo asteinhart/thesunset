@@ -4,7 +4,7 @@
 
 export const s3Prefix = 'https://thesunset.s3.amazonaws.com';
 
-export function getSunsetImage(date: string): string {
+export function getSunsetImagePath(date: string): string {
 	const path = `${s3Prefix}/${date.substring(0, 4)}-${date.substring(5, 7)}-${date.substring(8, 10)}/best_sunset.jpg`;
 	return path;
 }
@@ -25,7 +25,6 @@ export async function getScores() {
 		try {
 			const response = await fetch(url);
 			const data = await response.json();
-			console.log(data);
 			return data;
 		} catch (error) {
 			console.error('Error fetching sunset scores:', error);

@@ -5,17 +5,47 @@
 	import { initRows, fullMonthYear, arrDays, updateRows } from '../datapicker';
 	import { currentDate, scores } from '../store';
 
+	$inspect('score', $scores);
+
+	const minMaxScore = $derived(Math.min(...Object.values($scores).map((d) => d.max_score || 0)));
+	const maxMaxScore = $derived(Math.max(...Object.values($scores).map((d) => d.max_score || 0)));
+
+	$inspect('minMaxScore', minMaxScore);
+	$inspect('maxMaxScore', maxMaxScore);
+
+	const findCutoffs = () => {
+		const value = (maxMaxScore - minMaxScore) / 5; // Divide the range into 5 equal parts
+		return [
+			minMaxScore,
+			minMaxScore + value,
+			minMaxScore + value * 2,
+			minMaxScore + value * 3,
+			minMaxScore + value * 4
+		];
+	};
+
+	const cutoffs = $derived(findCutoffs());
+
+	console.log('cutoffs', cutoffs);
+
 	let rows = $state(initRows()),
 		selectedMonth = $state(+format(new Date(), 'MM')),
 		selectedYear = $state(+format(new Date(), 'yyyy')),
 		selectedFullDate = $state(format(new Date(), 'MM-dd-yyyy'));
 
-	function lookupColor(score: number) {
-		console.log('lookupColor', score);
-		if (score >= 110) {
+	function lookupColor(score: number, cutoffs: number[]): string {
+		// create 5 bands of colors between min and max
+
+		if (score >= cutoffs[4]) {
 			return 'bg-[#fb918f]'; // Red
-		} else if (score >= 0) {
-			return 'bg-[#fbb790]'; // Orange
+		} else if (score >= cutoffs[3]) {
+			return 'bg-[#fba58b]'; // dark orange
+		} else if (score >= cutoffs[2]) {
+			return 'bg-[#ffd497]'; // light orange
+		} else if (score >= cutoffs[1]) {
+			return 'bg-[#fdf29a]'; // dark yellow
+		} else if (score >= cutoffs[0]) {
+			return 'bg-[#fff9c9]'; // Light Yellow
 		} else {
 			return 'bg-gray-100'; // Default light grey color
 		}
@@ -25,10 +55,9 @@
 		const dateColors: Record<string, string> = {};
 		Object.entries($scores).forEach(([date, scoreData]) => {
 			const dateKey = format(new Date(date + 'T00:00:00'), 'yyyy-MM-dd');
-			console.log('check dates', date, dateKey);
 
 			const score = scoreData.max_score || 0;
-			const color = lookupColor(score);
+			const color = lookupColor(score, cutoffs);
 
 			dateColors[dateKey] = color;
 		});
@@ -42,9 +71,6 @@
 		const dateKey = `${year}-${padNumber(month)}-${padNumber(day)}`;
 		return dateColors[dateKey] || 'bg-gray-100'; // Default light grey color
 	}
-
-	$inspect('selectedFullDate', selectedFullDate);
-	$inspect('scores', $scores);
 
 	/**
 	 * Navigate months
@@ -220,7 +246,41 @@
 							</tbody>
 						</table>
 					</div>
-					here is something
+					<!-- Legend -->
+					<div class=" p-3 rounded-lg">
+						<div class="flex items-center space-x-4 items-start">
+							<!-- No sunset -->
+							<div class="flex items-center space-x-1">
+								<div class="w-4 h-4 bg-gray-100 border border-gray-300 rounded"></div>
+								<span class="text-xs text-gray-600 self-start">No Sunset</span>
+							</div>
+							<!-- Sunset quality gradient -->
+							<div class="flex items-center space-x-1 items-start">
+								<div class="flex flex-col items-center space-y-1">
+									<div class="flex space-x-1">
+										<div class="w-4 h-4 bg-[#fff9c9] rounded"></div>
+										<div class="w-4 h-4 bg-[#fdf29a] rounded"></div>
+										<div class="w-4 h-4 bg-[#ffd497] rounded"></div>
+										<div class="w-4 h-4 bg-[#fba58b] rounded"></div>
+										<div class="w-4 h-4 bg-[#fb918f] rounded"></div>
+									</div>
+									<div class="w-full flex justify-center">
+										<svg width="60" height="12" viewBox="0 0 60 12" class="text-gray-400">
+											<path
+												d="M2 6 L58 6 M52 2 L58 6 L52 10"
+												stroke="currentColor"
+												stroke-width="2"
+												fill="none"
+											/>
+										</svg>
+									</div>
+								</div>
+								<div class="flex flex-col items-center">
+									<span class="text-xs text-gray-600">Nicer Sunset</span>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

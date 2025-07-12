@@ -17,8 +17,6 @@
 		values: xValues.map((timeKey) => item.scores[timeKey] || 0)
 	}));
 
-	console.log(prepData);
-
 	let yMax = $derived(Math.max(...prepData.flatMap((d) => d.values)));
 	let yMin = $derived(Math.min(...prepData.map((d) => Math.max(...d.values))));
 
@@ -134,6 +132,7 @@
 					.axisBottom(xScale)
 					.tickValues(displayTicks)
 					.tickFormat((d, i) => displayLabels[i])
+					.tickSizeOuter(0) // Removes the outer domain ticks
 			)
 			.selectAll('text')
 			.style('font-family', 'system-ui, -apple-system, sans-serif')
@@ -169,7 +168,8 @@
 		const line = d3
 			.line<number>()
 			.x((d, i) => xScale(xValues[i]))
-			.y((d) => yScale(d));
+			.y((d) => yScale(d))
+			.defined((d) => d !== 0); // Handle undefined/null values
 
 		// Draw lines
 		g.selectAll('.line')
@@ -197,7 +197,6 @@
 					.attr('fill', 'none')
 					.attr('stroke', () => {
 						const maxVal = d3.max(d.values) || 0;
-						console.log(maxVal, selectedDate);
 						return d.date === selectedDate ? colorScale(maxVal as number) : 'grey';
 					})
 					.attr('stroke-width', d.date === selectedDate ? 5 : 2)

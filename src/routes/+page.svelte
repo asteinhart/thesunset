@@ -1,4 +1,8 @@
 <script lang="ts">
+	// TODD
+	// highlight bar
+	// calendar legend
+
 	import '../app.css';
 
 	import Header from '$lib/components/Header.svelte';
@@ -6,7 +10,7 @@
 	import Graph from '$lib/components/Graph.svelte';
 	import Highlights from '$lib/components/Highlights.svelte';
 
-	import { getSunsetImage, formatDate, getScores } from '$lib/utils';
+	import { getSunsetImagePath, formatDate, getScores } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { currentDate, scores } from '$lib/store';
 	import { format } from 'date-fns';
@@ -18,6 +22,13 @@
 	});
 
 	let sunsetDate = $state(formatDate($currentDate));
+
+	function getSunsetImage(date: string): string | null {
+		if (!$scores || !$scores[date]) {
+			return null;
+		}
+		return getSunsetImagePath(date);
+	}
 	let sunsetImage = $derived.by(() => getSunsetImage(sunsetDate));
 
 	let dateMeta = $derived(
@@ -43,8 +54,6 @@
 			return 'Peak was exacty at the Sunset';
 		}
 	});
-
-	$inspect('scores', $scores);
 
 	$effect(() => {
 		// Update the sunset date whenever the current date changes
@@ -105,6 +114,10 @@
 				</div>
 				{#if sunsetImage}
 					<img src={sunsetImage} alt="Sunset for {sunsetDate}" class="full-image" />
+				{:else}
+					<div class="full-image" style="background-color:white">
+						<p><i>No sunset available for {sunsetDate}</i></p>
+					</div>
 				{/if}
 			</div>
 		</div>

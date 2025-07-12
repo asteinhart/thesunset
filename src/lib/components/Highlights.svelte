@@ -1,34 +1,42 @@
 <script lang="ts">
-	import { getSunsetImage } from '../utils';
+	import { getSunsetImagePath } from '../utils';
 	import { format } from 'date-fns';
-	import { currentDate } from '$lib/store';
+	import { currentDate, scores } from '$lib/store';
 	import { formatDate } from '$lib/utils';
 
+	// get top 5 scores
+	let highlights = $derived(
+		Object.entries($scores)
+			.sort((a, b) => b[1].max_score - a[1].max_score)
+			.slice(0, 10)
+			.map(([date, item]) => ({
+				date,
+				max_score: item.max_score
+			}))
+	);
 	// Sample highlight dates - you can make this dynamic later
-	const highlights = [
-		{ date: '7/1/25', formattedDate: '07-01-2025' },
-		{ date: '6/23/25', formattedDate: '06-23-2025' },
-		{ date: '2/7/23', formattedDate: '02-07-2023' },
-		{ date: '10/5/26', formattedDate: '10-05-2026' },
-		{ date: '7/7/25', formattedDate: '07-07-2025' },
-		{ date: '3/15/24', formattedDate: '03-15-2024' },
-		{ date: '8/22/25', formattedDate: '08-22-2025' },
-		{ date: '12/3/23', formattedDate: '12-03-2023' },
-		{ date: '5/18/26', formattedDate: '05-18-2026' },
-		{ date: '9/11/24', formattedDate: '09-11-2024' },
-		{ date: '4/30/25', formattedDate: '04-30-2025' },
-		{ date: '11/14/23', formattedDate: '11-14-2023' },
-		{ date: '6/8/26', formattedDate: '06-08-2026' },
-		{ date: '1/25/24', formattedDate: '01-25-2024' },
-		{ date: '7/4/25', formattedDate: '07-04-2025' }
-	];
+	// const highlights = [
+	// 	{ date: '7/1/25', formattedDate: '07-01-2025' },
+	// 	{ date: '6/23/25', formattedDate: '06-23-2025' },
+	// 	{ date: '2/7/23', formattedDate: '02-07-2023' },
+	// 	{ date: '10/5/26', formattedDate: '10-05-2026' },
+	// 	{ date: '7/7/25', formattedDate: '07-07-2025' },
+	// 	{ date: '3/15/24', formattedDate: '03-15-2024' },
+	// 	{ date: '8/22/25', formattedDate: '08-22-2025' },
+	// 	{ date: '12/3/23', formattedDate: '12-03-2023' },
+	// 	{ date: '5/18/26', formattedDate: '05-18-2026' },
+	// 	{ date: '9/11/24', formattedDate: '09-11-2024' },
+	// 	{ date: '4/30/25', formattedDate: '04-30-2025' },
+	// 	{ date: '11/14/23', formattedDate: '11-14-2023' },
+	// 	{ date: '6/8/26', formattedDate: '06-08-2026' },
+	// 	{ date: '1/25/24', formattedDate: '01-25-2024' },
+	// 	{ date: '7/4/25', formattedDate: '07-04-2025' }
+	// ];
 
 	// Function to handle clicking a highlight image
-	function handleHighlightClick(formattedDate: string) {
+	function handleHighlightClick(date: string) {
 		// Convert the formatted date string to a Date object
-		const [month, day, year] = formattedDate.split('-').map(Number);
-		const clickedDate = new Date(year, month - 1, day); // month is 0-indexed
-		console.log(clickedDate);
+		const clickedDate = new Date(date + 'T00:00:00'); // month is 0-indexed
 		currentDate.set(clickedDate);
 
 		// Smooth scroll to top
@@ -50,16 +58,13 @@
 				<div class="highlight-date">{highlight.date}</div>
 				<div
 					class="highlight-image"
-					onclick={() => handleHighlightClick(highlight.formattedDate)}
+					onclick={() => handleHighlightClick(highlight.date)}
 					role="button"
 					tabindex="0"
-					onkeydown={(e) => e.key === 'Enter' && handleHighlightClick(highlight.formattedDate)}
+					onkeydown={(e) => e.key === 'Enter' && handleHighlightClick(highlight.date)}
 				>
-					{#if getSunsetImage(highlight.formattedDate)}
-						<img
-							src={getSunsetImage(formatDate(highlight.formattedDate))}
-							alt="Sunset for {highlight.date}"
-						/>
+					{#if getSunsetImagePath(highlight.date)}
+						<img src={getSunsetImagePath(highlight.date)} alt="Sunset for {highlight.date}" />
 					{:else}
 						<div class="placeholder-image"></div>
 					{/if}
@@ -114,7 +119,7 @@
 		font-size: 0.9rem;
 		font-weight: 500;
 		color: #333;
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.1rem;
 		text-align: left;
 	}
 
