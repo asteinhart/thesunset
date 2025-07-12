@@ -3,9 +3,8 @@ from pathlib import Path
 import os
 from logger import logger
 from datetime import date, datetime
-from utils import find_sunset_time, upload_to_s3, tmp_cleanup
+from utils import find_sunset_time, upload_to_s3, tmp_cleanup, download_from_s3
 import json
-from utils import download_from_s3
 
 DIR = Path(__file__).parent.resolve()
 
