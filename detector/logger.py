@@ -9,7 +9,3 @@ logging.basicConfig(
 
 # Create a logger instance
 logger = logging.getLogger(__name__)
-
-
-def log_message(message):
-    logger.info(message)

@@ -175,6 +175,9 @@ def find_sunset_time(
 
 
 def determine_start_end_time(when: str = "today", buffer_min: int = 20) -> tuple:
+    """
+    Determine the start and end time for capturing images.
+    """
     if when == "today":
         date = datetime.now()
     elif when == "tomorrow":

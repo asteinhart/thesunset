@@ -13,6 +13,9 @@ DIR = Path(__file__).parent.resolve()
 
 
 def run(take_image: bool = True, testing: bool = False) -> bool:
+    """
+    Main function to run the sunset detection and image capture process.
+    """
     logger.info("Running thesunset")
     start_time, sunset, end_time = determine_start_end_time(when="today")
 
@@ -56,6 +59,9 @@ def run(take_image: bool = True, testing: bool = False) -> bool:
 
 
 def schedule_next_run(when: str = "tomorrow", testing: bool = False) -> bool:
+    """
+    Schedule the next run of the sunset detection process.
+    """
 
     if testing:
         logger.info("testing. scheduling run for 5 seconds")
@@ -79,6 +85,10 @@ def schedule_next_run(when: str = "tomorrow", testing: bool = False) -> bool:
 
 
 def main(testing: bool = False) -> None:
+    """
+    Main entry point for the sunset detection application.
+
+    """
 
     if testing:
         # Run immediately for testing purposes
