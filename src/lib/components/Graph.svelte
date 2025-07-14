@@ -3,35 +3,23 @@
 	import * as d3 from 'd3';
 	import { currentDate, scores } from '../store';
 	import { format } from 'date-fns';
-	import { s3Prefix } from '../utils';
 
 	let svgElement: any;
 	let tooltip: any;
 	let containerElement: HTMLDivElement;
 	let selectedDate = $derived(format($currentDate, 'yyyy-MM-dd'));
 
-	const xValues = [-20, -15, -10, -5, 0, 5, 10, 15, 20];
+	const xValues = [-40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15];
 
 	let prepData = Object.entries($scores).map(([key, item]) => ({
 		date: key,
 		values: xValues.map((timeKey) => item.scores[timeKey] || 0)
 	}));
 
+	$inspect(prepData, 'prepData');
+
 	let yMax = $derived(Math.max(...prepData.flatMap((d) => d.values)));
 	let yMin = $derived(Math.min(...prepData.map((d) => Math.max(...d.values))));
-
-	const xLabels = [
-		'-20min',
-		'-15min',
-		'-10min',
-		'-10min',
-		'-5min',
-		'Sunset',
-		'+5min',
-		'+10min',
-		'+15min',
-		'+20min'
-	];
 
 	onMount(() => {
 		drawChart();
@@ -111,7 +99,7 @@
 		const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
 		// Scales
-		const xScale = d3.scaleLinear().domain([-20, 20]).range([0, width]);
+		const xScale = d3.scaleLinear().domain([-40, 15]).range([0, width]);
 
 		const yScale = d3.scaleLinear().domain([0, yMax]).range([height, 0]);
 
@@ -122,8 +110,8 @@
 			.interpolate(d3.interpolateHsl); // Use HSL for better color transitions
 
 		// X axis - only show specific labels
-		const displayTicks = [-15, -10, -5, 0, 5, 10, 15];
-		const displayLabels = ['-15min', '-10', '-5', 'Sunset', '+5', '+10', '+15'];
+		const displayTicks = [-40, -30, -20, -10, 0, 10];
+		const displayLabels = ['-40min', '-30', '-20', '-10', 'Sunset', '+10'];
 
 		g.append('g')
 			.attr('transform', `translate(0,${height})`)
@@ -214,7 +202,7 @@
 				tooltip.transition().duration(200).style('opacity', 0.9);
 				tooltip
 					.html(
-						`<span style="background: #ffc107; color: #333; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-right: 8px;">${maxValue}</span> ${d.date}`
+						`<span style="background: ${colorScale(maxValue as number)}; color: #333; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-right: 8px;">${Math.round(maxValue)}</span> ${d.date}`
 					)
 					.style('left', event.pageX + 10 + 'px')
 					.style('top', event.pageY - 28 + 'px');

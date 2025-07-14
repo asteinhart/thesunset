@@ -184,8 +184,8 @@ def determine_start_end_time(when: str = "today", buffer_min: int = 20) -> tuple
         date = datetime.now() + timedelta(days=1)
 
     sunset = find_sunset_time(date=date)
-    start_time = sunset - timedelta(minutes=buffer_min)
-    end_time = sunset + timedelta(minutes=buffer_min)
+    start_time = sunset - timedelta(minutes=40)
+    end_time = sunset + timedelta(minutes=10)
 
     return start_time, sunset, end_time
 
