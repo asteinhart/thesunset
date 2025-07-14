@@ -203,3 +203,31 @@ def tmp_cleanup(tmp_dir: Path = DIR / "tmp/") -> None:
         print(f"Temporary directory {tmp_dir} cleaned up.")
     else:
         print(f"Temporary directory {tmp_dir} does not exist.")
+
+
+def save_folder_s3(
+    folder_path: Path = DIR / "tmp/",
+    s3_folder: str = "images/",
+    bucket: str = "thesunset",
+) -> bool:
+    """
+    Save a folder to S3.
+
+    Args:
+        folder_path (Path): The path to the folder to upload.
+        bucket (str): The target S3 bucket name.
+        s3_folder (str): The S3 folder path where files will be uploaded.
+
+    Returns:
+        bool: True if successful, False otherwise.
+    """
+    if not os.path.exists(folder_path):
+        logger.error(f"Folder {folder_path} does not exist.")
+        return False
+
+    for filename in os.listdir(folder_path):
+        local_file = folder_path / filename
+        s3_object = f"{s3_folder}{filename}"
+        upload_to_s3(str(local_file), s3_object, bucket)
+
+    return True
