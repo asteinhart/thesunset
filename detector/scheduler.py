@@ -7,12 +7,12 @@ from pathlib import Path
 from SunsetDetector import SunsetDetector
 from image_capture import capture_images
 from logger import logger
-from utils import determine_start_end_time, tmp_cleanup
+from utils import determine_start_end_time, tmp_cleanup, find_sunset_time
 
 DIR = Path(__file__).parent.resolve()
 
 
-def run(take_image: bool = True, testing: bool = True) -> bool:
+def run(take_image: bool = True, testing: bool = False) -> bool:
     """
     Main function to run the sunset detection and image capture process.
     """
@@ -55,10 +55,10 @@ def run(take_image: bool = True, testing: bool = True) -> bool:
     #     tmp_cleanup(tmp_dir=DIR / "tmp/")
     #     logger.info("Temporary files cleaned up.")
 
-    schedule_next_run(when="tomorrow")
+    schedule_next_run()
 
 
-def schedule_next_run(when: str = "tomorrow", testing: bool = True) -> bool:
+def schedule_next_run(testing: bool = False) -> bool:
     """
     Schedule the next run of the sunset detection process.
     """
@@ -68,6 +68,15 @@ def schedule_next_run(when: str = "tomorrow", testing: bool = True) -> bool:
         schedule.clear()
         schedule.every(5).seconds.do(run)
         return True
+
+    sunset = find_sunset_time()
+
+    if datetime.now(tz=datetime.now().astimezone().tzinfo) > sunset:
+        logger.info("Sunset has already passed for today. Scheduling for tomorrow.")
+        when = "tomorrow"
+    else:
+        when = "today"
+    logger.info(f"Scheduling next run for {when}")
 
     start_time, sunset, end_time = determine_start_end_time(when=when)
     logger.info(
@@ -84,7 +93,7 @@ def schedule_next_run(when: str = "tomorrow", testing: bool = True) -> bool:
     return True
 
 
-def main(testing: bool = True) -> None:
+def main(testing: bool = False) -> None:
     """
     Main entry point for the sunset detection application.
 
@@ -95,7 +104,7 @@ def main(testing: bool = True) -> None:
         logger.info("Running thesunset immediately for testing")
         schedule_next_run(testing=True)
     else:
-        schedule_next_run(when="today")
+        schedule_next_run()
 
     while True:
         logger.info("Checking for scheduled runs...")
@@ -107,4 +116,4 @@ def main(testing: bool = True) -> None:
 
 
 if __name__ == "__main__":
-    main(testing=True)  # Set to False for production use
+    main(testing=False)  # Set to False for production use
