@@ -12,7 +12,7 @@ from utils import determine_start_end_time, tmp_cleanup
 DIR = Path(__file__).parent.resolve()
 
 
-def run(take_image: bool = True, testing: bool = False) -> bool:
+def run(take_image: bool = True, testing: bool = True) -> bool:
     """
     Main function to run the sunset detection and image capture process.
     """
@@ -58,7 +58,7 @@ def run(take_image: bool = True, testing: bool = False) -> bool:
     schedule_next_run(when="tomorrow")
 
 
-def schedule_next_run(when: str = "tomorrow", testing: bool = False) -> bool:
+def schedule_next_run(when: str = "tomorrow", testing: bool = True) -> bool:
     """
     Schedule the next run of the sunset detection process.
     """
@@ -84,7 +84,7 @@ def schedule_next_run(when: str = "tomorrow", testing: bool = False) -> bool:
     return True
 
 
-def main(testing: bool = False) -> None:
+def main(testing: bool = True) -> None:
     """
     Main entry point for the sunset detection application.
 
@@ -107,4 +107,4 @@ def main(testing: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    main(testing=True)  # Set to False for production use
