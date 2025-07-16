@@ -20,15 +20,15 @@ class SunsetDetector:
         images: Path = None,
         best_image: Path = None,
         save_method: str = "s3",
-        today: str = date.today().strftime("%Y-%m-%d"),
+        today: str = date.today(),
     ):
         self.images = Path(images) if isinstance(images, str) else images
         self.best_image = best_image
-        self.sunset_time = find_sunset_time().strftime("%Y-%m-%d_%H:%M:%S")
-        self.today = today
+        self.sunset_time = find_sunset_time(today).strftime("%Y-%m-%d_%H:%M:%S")
+        self.today = today.strftime("%Y-%m-%d")
         self.metadata = {
             "sunset_time": self.sunset_time,
-            "today": self.today,
+            "today": self.today.strftime("%Y-%m-%d"),
             "detect_method": detect_method,
             "save_method": save_method,
             "num_images": 0,
@@ -211,7 +211,7 @@ class SunsetDetector:
                 logger.error(f"Error converting image to webp: {e}")
                 ext = "jpg"
 
-        save_path = f"{self.today}/best_sunset.{ext}"
+        save_path = f"{self.today.strftime("%Y-%m-%d")}/best_sunset.{ext}"
         # Placeholder for S3 saving logic
         logger.info(f"Saving best image to S3 at {save_path}")
         if not self.best_image:
@@ -220,7 +220,7 @@ class SunsetDetector:
         upload_to_s3(self.best_image, s3_object=save_path)
 
         # upload metadata to s3
-        metadata_path = f"tmp/{self.today}/metadata.json"
+        metadata_path = f"tmp/{self.today.strftime("%Y-%m-%d")}/metadata.json"
         # Create directory if it doesn't exist
         metadata_dir = os.path.dirname(metadata_path)
         if not os.path.exists(metadata_dir):
@@ -228,7 +228,7 @@ class SunsetDetector:
 
         with open(metadata_path, "w") as f:
             json.dump(self.metadata, f, indent=4)
-        upload_to_s3(metadata_path, s3_object=f"{self.today}/metadata.json")
+        upload_to_s3(metadata_path, s3_object=f"{self.today.strftime("%Y-%m-%d")}/metadata.json")
 
         return True
 
@@ -243,7 +243,7 @@ class SunsetDetector:
             logger.error("No best image found to save.")
             return False
 
-        save_path = f"{DIR}/tmp/{self.today}/best_sunset.jpg"
+        save_path = f"{DIR}/tmp/{self.today.strftime("%Y-%m-%d")}/best_sunset.jpg"
         save_dir = os.path.dirname(save_path)
 
         # Create directory if it doesn't exist
@@ -256,9 +256,9 @@ class SunsetDetector:
             logger.info(f"Best image saved to {save_path}")
 
             # upload metadata to s3
-            metadata_path = f"{DIR}/tmp/{self.today}/metadata.json"
-            if not os.path.exists(os.path.dirname(f"{DIR}/tmp/{self.today}")):
-                os.makedirs(os.path.dirname(f"{DIR}/tmp/{self.today}"))
+            metadata_path = f"{DIR}/tmp/{self.today.strftime("%Y-%m-%d")}/metadata.json"
+            if not os.path.exists(os.path.dirname(f"{DIR}/tmp/{self.today.strftime("%Y-%m-%d")}")):
+                os.makedirs(os.path.dirname(f"{DIR}/tmp/{self.today.strftime("%Y-%m-%d")}"))
 
             with open(metadata_path, "w") as f:
                 json.dump(self.metadata, f, indent=4)
@@ -337,7 +337,7 @@ class SunsetDetector:
         min_to_sunset = round(min_to_sunset)
 
         new_metadata = {
-            self.today: {
+            self.today.strftime("%Y-%m-%d"): {
                 "scores": time_based_scores,
                 "max_score": max(self.scores.values(), default=0.0),
                 "best_image_time": best_image_time_fmt,
@@ -353,7 +353,7 @@ class SunsetDetector:
                 existing_metadata = json.load(f)
 
             # Add new scores to existing metadata
-            existing_metadata[self.today] = new_metadata[self.today]
+            existing_metadata[self.today.strftime("%Y-%m-%d")] = new_metadata[self.today.strftime("%Y-%m-%d")]
 
             # Write updated metadata back to file
             with open(local_metadata_path, "w") as f:
