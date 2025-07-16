@@ -174,7 +174,9 @@ def find_sunset_time(
     return sunset.astimezone(pytz.timezone(city.timezone))
 
 
-def determine_start_end_time(when: str = "today", buffer_min: int = 20) -> tuple:
+def determine_start_end_time(
+    when: str = "today", before_sun: int = 40, after_sun: int = 30
+) -> tuple:
     """
     Determine the start and end time for capturing images.
     """
@@ -184,8 +186,8 @@ def determine_start_end_time(when: str = "today", buffer_min: int = 20) -> tuple
         date = datetime.now() + timedelta(days=1)
 
     sunset = find_sunset_time(date=date)
-    start_time = sunset - timedelta(minutes=40)
-    end_time = sunset + timedelta(minutes=10)
+    start_time = sunset - timedelta(minutes=before_sun)
+    end_time = sunset + timedelta(minutes=after_sun)
 
     return start_time, sunset, end_time
 
