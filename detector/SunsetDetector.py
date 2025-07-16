@@ -26,7 +26,7 @@ class SunsetDetector:
         self.best_image = best_image
         self.sunset_time = find_sunset_time(today).strftime("%Y-%m-%d_%H:%M:%S")
         self.today = today
-        self.today_str = self.today_str
+        self.today_str = today.strftime("%Y-%m-%d")
         self.metadata = {
             "sunset_time": self.sunset_time,
             "today": self.today_str,
