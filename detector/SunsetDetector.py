@@ -24,7 +24,7 @@ class SunsetDetector:
     ):
         self.images = Path(images) if isinstance(images, str) else images
         self.best_image = best_image
-        self.sunset_time = find_sunset_time(date=today).strftime("%Y-%m-%d_%H:%M:%S%z")
+        self.sunset_time = find_sunset_time(date=today).strftime("%Y-%m-%d_%H:%M:%S")
         self.today = today
         self.today_str = today.strftime("%Y-%m-%d")
         self.metadata = {
