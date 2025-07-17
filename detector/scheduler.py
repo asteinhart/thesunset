@@ -83,7 +83,7 @@ def schedule_next_run(testing: bool = False) -> bool:
         f"The sunset tomorrow is at {sunset}. Taking pictures from {start_time} to {end_time}"
     )
     schedule.clear()
-    schedule.every().day.at((start_time - timedelta(minutes=3)).strftime("%H:%M")).do(
+    schedule.every().day.at((start_time + timedelta(minutes=10)).strftime("%H:%M")).do(
         run, testing=testing
     )
     logger.info(
