@@ -5,6 +5,7 @@ from picamera2 import Picamera2
 from libcamera import controls
 from pathlib import Path
 import os
+from utils import logger
 
 DIR = Path(__file__).parent.resolve()
 
@@ -32,11 +33,17 @@ def capture_images(
             camera.set_controls({"AwbMode": controls.AwbModeEnum.Daylight})
 
             camera.start()
+
+            logger.info("Camera started")
+            logger.info(f"Capturing images from {start_time} to {end_time}")
+            logger.info(f"now is {datetime.now(tz=datetime.now().astimezone().tzinfo)}")
+
             while datetime.now(tz=datetime.now().astimezone().tzinfo) < end_time:
                 if datetime.now(tz=datetime.now().astimezone().tzinfo) >= start_time:
                     timestamp = datetime.now(
                         tz=datetime.now().astimezone().tzinfo
                     ).strftime("%Y%m%d_%H%M")
+                    logger.info(f"Capturing image at {timestamp}")
                     camera.capture_file(export_path / today / f"{timestamp}.jpg")
                 time.sleep(frequency)
 
