@@ -39,6 +39,7 @@ def capture_images(
             logger.info(f"now is {datetime.now(tz=datetime.now().astimezone().tzinfo)}")
 
             while datetime.now(tz=datetime.now().astimezone().tzinfo) < end_time:
+                logger.info("Waiting for the right time to capture images...")
                 if datetime.now(tz=datetime.now().astimezone().tzinfo) >= start_time:
                     timestamp = datetime.now(
                         tz=datetime.now().astimezone().tzinfo
@@ -46,5 +47,8 @@ def capture_images(
                     logger.info(f"Capturing image at {timestamp}")
                     camera.capture_file(export_path / today / f"{timestamp}.jpg")
                 time.sleep(frequency)
+
+            logger.info("Image capture completed.")
+            camera.stop()
 
     return True
