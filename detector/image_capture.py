@@ -152,7 +152,7 @@ def capture_images(
                 else:
                     logger.info("Waiting for the right time to capture images...")
 
-                time.sleep(frequency * 60)  # Convert minutes to seconds
+                time.sleep(frequency)
 
             logger.info(
                 f"Image capture completed. Successful: {successful_captures}, Failed: {failed_captures}"
