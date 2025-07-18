@@ -26,29 +26,28 @@ def capture_images(
     os.makedirs(export_path / today, exist_ok=True)
 
     if source == "rpi":
-        with Picamera2() as camera:
-            camera.configure(
-                camera.create_still_configuration(main={"size": (3280, 2464)})
-            )
-            camera.set_controls({"AwbMode": controls.AwbModeEnum.Daylight})
 
-            camera.start()
+        camera = Picamera2()
+        camera.configure(camera.create_still_configuration(main={"size": (3280, 2464)}))
+        camera.set_controls({"AwbMode": controls.AwbModeEnum.Daylight})
 
-            logger.info("Camera started")
-            logger.info(f"Capturing images from {start_time} to {end_time}")
-            logger.info(f"now is {datetime.now(tz=datetime.now().astimezone().tzinfo)}")
+        camera.start()
 
-            while datetime.now(tz=datetime.now().astimezone().tzinfo) < end_time:
-                logger.info("Waiting for the right time to capture images...")
-                if datetime.now(tz=datetime.now().astimezone().tzinfo) >= start_time:
-                    timestamp = datetime.now(
-                        tz=datetime.now().astimezone().tzinfo
-                    ).strftime("%Y%m%d_%H%M")
-                    logger.info(f"Capturing image at {timestamp}")
-                    camera.capture_file(export_path / today / f"{timestamp}.jpg")
-                time.sleep(frequency)
+        logger.info("Camera started")
+        logger.info(f"Capturing images from {start_time} to {end_time}")
+        logger.info(f"now is {datetime.now(tz=datetime.now().astimezone().tzinfo)}")
 
-            logger.info("Image capture completed.")
-            camera.stop()
+        while datetime.now(tz=datetime.now().astimezone().tzinfo) < end_time:
+            logger.info("Waiting for the right time to capture images...")
+            if datetime.now(tz=datetime.now().astimezone().tzinfo) >= start_time:
+                timestamp = datetime.now(
+                    tz=datetime.now().astimezone().tzinfo
+                ).strftime("%Y%m%d_%H%M")
+                logger.info(f"Capturing image at {timestamp}")
+                camera.capture_file(export_path / today / f"{timestamp}.jpg")
+            time.sleep(frequency)
+
+        logger.info("Image capture completed.")
+        camera.stop()
 
     return True
