@@ -75,6 +75,7 @@ class SunsetDetector:
         )
 
         for image_path in image_paths:
+            logger.debug(f"Processing image: {image_path}")
             score = self.detect(self.images / image_path)
             logger.debug(f"Image: {image_path}, Score: {score}")
             self.scores[image_path] = score
