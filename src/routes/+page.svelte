@@ -21,6 +21,8 @@
 		scores.set(data);
 	});
 
+	$inspect($scores, 'scores');
+
 	let sunsetDate = $state(formatDate($currentDate));
 
 	function getSunsetImage(date: string): string | null {
