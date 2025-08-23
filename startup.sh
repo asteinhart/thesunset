@@ -2,7 +2,7 @@
 
 # create new screen
 screen -dmS sunset bash -c "
-    cd sunset/detector && \
+    cd thesunset/detector && \
     source sunset/bin/activate && \
     python3 scheduler.py
 "
