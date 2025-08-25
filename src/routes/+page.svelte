@@ -13,23 +13,24 @@
 	import { getSunsetImagePath, formatDate, getScores } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { currentDate, scores } from '$lib/store';
-	import { format } from 'date-fns';
+	import { compareAsc, format } from 'date-fns';
 
 	// Initialize scores on mount
 	onMount(async () => {
 		const data = await getScores();
 		scores.set(data);
+		// check if today has a score, if not set currentDate to yesterday
+		let startDate = formatDate($currentDate);
+		if ($scores && !$scores[startDate]) {
+			console.log("Today's date not found in scores, setting to yesterday");
+			console.log('Current date:', startDate);
+			const yesterday = new Date();
+			yesterday.setDate(yesterday.getDate() - 1);
+			currentDate.set(yesterday);
+		}
 	});
 
 	$inspect($scores, 'scores');
-
-	// check if today has a score, if not set currentDate to yesterday
-	let startDate = formatDate($currentDate);
-	if ($scores && !$scores[startDate]) {
-		const yesterday = new Date();
-		yesterday.setDate(yesterday.getDate() - 1);
-		currentDate.set(yesterday);
-	}
 
 	let sunsetDate = $state(formatDate($currentDate));
 
