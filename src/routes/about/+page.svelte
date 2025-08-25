@@ -137,107 +137,111 @@
 					possibly be helpful, but since I'm simply comparing the same scene over time in this
 					project, I believe this simpler approach yields acceptable results.
 				</p>
-				<p>Let's see some examples.</p>
 			</div>
 
-			<div class="diagram-container">
-				<div class="diagram">
-					<!-- Each row contains sun visualization with time label and image -->
+			<!-- commenting out -->
+			{#if false}
+				<div class="diagram-container">
+					<div class="diagram">
+						<!-- Each row contains sun visualization with time label and image -->
 
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-1">
-							<div class="time">20 min before Sunset</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
+						<div class="sunset-row">
+							<div class="sunset-visual sun-pos-1">
+								<div class="time">20 min before Sunset</div>
+								<div class="horizon-line"></div>
+								<div class="sun"></div>
+							</div>
+							<div class="thumbnail"><div class="placeholder-img">-20m</div></div>
+							<div class="thumbnail"><div class="placeholder-img">-20m</div></div>
 						</div>
-						<div class="thumbnail"><div class="placeholder-img">-20m</div></div>
-						<div class="thumbnail"><div class="placeholder-img">-20m</div></div>
-					</div>
 
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-2">
-							<div class="time">15 min before</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
+						<div class="sunset-row">
+							<div class="sunset-visual sun-pos-2">
+								<div class="time">15 min before</div>
+								<div class="horizon-line"></div>
+								<div class="sun"></div>
+							</div>
+							<div class="thumbnail"><div class="placeholder-img">-15m</div></div>
+							<div class="thumbnail"><div class="placeholder-img">-15m</div></div>
 						</div>
-						<div class="thumbnail"><div class="placeholder-img">-15m</div></div>
-						<div class="thumbnail"><div class="placeholder-img">-15m</div></div>
-					</div>
 
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-3">
-							<div class="time">10 min before</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
+						<div class="sunset-row">
+							<div class="sunset-visual sun-pos-3">
+								<div class="time">10 min before</div>
+								<div class="horizon-line"></div>
+								<div class="sun"></div>
+							</div>
+							<div class="thumbnail"><div class="placeholder-img">-10m</div></div>
+							<div class="thumbnail"><div class="placeholder-img">-10m</div></div>
 						</div>
-						<div class="thumbnail"><div class="placeholder-img">-10m</div></div>
-						<div class="thumbnail"><div class="placeholder-img">-10m</div></div>
-					</div>
 
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-4">
-							<div class="time">5 min before</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
+						<div class="sunset-row">
+							<div class="sunset-visual sun-pos-4">
+								<div class="time">5 min before</div>
+								<div class="horizon-line"></div>
+								<div class="sun"></div>
+							</div>
+							<div class="thumbnail"><div class="placeholder-img">-5m</div></div>
+							<div class="thumbnail"><div class="placeholder-img">-5m</div></div>
 						</div>
-						<div class="thumbnail"><div class="placeholder-img">-5m</div></div>
-						<div class="thumbnail"><div class="placeholder-img">-5m</div></div>
-					</div>
 
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-5">
-							<div class="time">Sunset</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
+						<div class="sunset-row">
+							<div class="sunset-visual sun-pos-5">
+								<div class="time">Sunset</div>
+								<div class="horizon-line"></div>
+								<div class="sun"></div>
+							</div>
+							<div class="thumbnail"><div class="placeholder-img">Sunset</div></div>
+							<div class="thumbnail"><div class="placeholder-img">Sunset</div></div>
 						</div>
-						<div class="thumbnail"><div class="placeholder-img">Sunset</div></div>
-						<div class="thumbnail"><div class="placeholder-img">Sunset</div></div>
-					</div>
 
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-6">
-							<div class="time">5 min after Sunset</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
+						<div class="sunset-row">
+							<div class="sunset-visual sun-pos-6">
+								<div class="time">5 min after Sunset</div>
+								<div class="horizon-line"></div>
+								<div class="sun"></div>
+							</div>
+							<div class="thumbnail"><div class="placeholder-img">+5m</div></div>
+							<div class="thumbnail"><div class="placeholder-img">+5m</div></div>
 						</div>
-						<div class="thumbnail"><div class="placeholder-img">+5m</div></div>
-						<div class="thumbnail"><div class="placeholder-img">+5m</div></div>
-					</div>
 
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-7">
-							<div class="time">10 min after</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
+						<div class="sunset-row">
+							<div class="sunset-visual sun-pos-7">
+								<div class="time">10 min after</div>
+								<div class="horizon-line"></div>
+								<div class="sun"></div>
+							</div>
+							<div class="thumbnail"><div class="placeholder-img">+10m</div></div>
+							<div class="thumbnail"><div class="placeholder-img">+10m</div></div>
 						</div>
-						<div class="thumbnail"><div class="placeholder-img">+10m</div></div>
-						<div class="thumbnail"><div class="placeholder-img">+10m</div></div>
-					</div>
 
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-8">
-							<div class="time">15 min after</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
+						<div class="sunset-row">
+							<div class="sunset-visual sun-pos-8">
+								<div class="time">15 min after</div>
+								<div class="horizon-line"></div>
+								<div class="sun"></div>
+							</div>
+							<div class="thumbnail"><div class="placeholder-img">+15m</div></div>
+							<div class="thumbnail"><div class="placeholder-img">+15m</div></div>
 						</div>
-						<div class="thumbnail"><div class="placeholder-img">+15m</div></div>
-						<div class="thumbnail"><div class="placeholder-img">+15m</div></div>
-					</div>
 
-					<div class="sunset-row">
-						<div class="sunset-visual sun-pos-9">
-							<div class="time">20 min after</div>
-							<div class="horizon-line"></div>
-							<div class="sun"></div>
+						<div class="sunset-row">
+							<div class="sunset-visual sun-pos-9">
+								<div class="time">20 min after</div>
+								<div class="horizon-line"></div>
+								<div class="sun"></div>
+							</div>
+							<div class="thumbnail"><div class="placeholder-img">+20m</div></div>
+							<div class="thumbnail"><div class="placeholder-img">+20m</div></div>
 						</div>
-						<div class="thumbnail"><div class="placeholder-img">+20m</div></div>
-						<div class="thumbnail"><div class="placeholder-img">+20m</div></div>
 					</div>
+					<p class="diagram-caption">
+						Camera captures images every 5 minutes from 20 minutes before to 20 minutes after
+						sunset.
+					</p>
 				</div>
-				<p class="diagram-caption">
-					Camera captures images every 5 minutes from 20 minutes before to 20 minutes after sunset.
-				</p>
-			</div>
+			{/if}
+
 			<div class="prose">
 				<p>
 					After an image is selected, the best image is uploaded to an S3 bucket along with some
