@@ -102,8 +102,8 @@
 				<p>
 					Using the Python package <code>astral</code>, I check what the time of sunset is and
 					schedule a Python script to run using the <code>schedule</code> package. The script takes a
-					picture using a Raspberry Pi every 5 minutes starting 20 minutes before sunset and continuing
-					for 20 minutes after sunset for a total of 9 images. I temporarily save these locally on the
+					picture using a Raspberry Pi every 5 minutes starting 40 minutes before sunset and continuing
+					for 10 minutes after sunset for a total of 12 images. I temporarily save these locally on the
 					SD card on the Raspberry Pi.
 				</p>
 				<p>
