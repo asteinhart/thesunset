@@ -20,13 +20,18 @@ class SunsetDetector:
         images: Path = None,
         best_image: Path = None,
         save_method: str = "s3",
-        today: str = date.today(),
     ):
         self.images = Path(images) if isinstance(images, str) else images
         self.best_image = best_image
-        self.sunset_time = find_sunset_time(date=today).strftime("%Y-%m-%d_%H:%M:%S")
-        self.today = today
-        self.today_str = today.strftime("%Y-%m-%d")
+        self.today_str = images.split("/")[-1] if images else None
+        if self.today_str:
+            today_date = datetime.strptime(self.today_str, "%Y%m%d").date()
+            self.sunset_time = find_sunset_time(date=today_date).strftime(
+                "%Y-%m-%d_%H:%M:%S"
+            )
+        else:
+            self.sunset_time = None
+
         self.metadata = {
             "sunset_time": self.sunset_time,
             "today": self.today_str,
@@ -389,6 +394,9 @@ class SunsetDetector:
 
         :return: True if successful, False otherwise
         """
+        logger.info("SunsetDetector metadata:")
+        logger.info(self.metadata)
+
         if not self.images:
             logger.error("No images provided for sunset detection.")
             return False
