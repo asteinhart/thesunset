@@ -19,7 +19,10 @@
 	$inspect(prepData, 'prepData');
 
 	let yMax = $derived(Math.max(...prepData.flatMap((d) => d.values)));
-	let yMin = $derived(Math.min(...prepData.map((d) => Math.max(...d.values))));
+	let yMaxMin = $derived(Math.min(...prepData.map((d) => Math.max(...d.values))));
+	let yMin = $derived(Math.min(...prepData.flatMap((d) => d.values.filter((v) => v > 0))));
+
+	console.log('yMin:', yMin);
 
 	onMount(() => {
 		drawChart();
@@ -101,11 +104,14 @@
 		// Scales
 		const xScale = d3.scaleLinear().domain([-40, 15]).range([0, width]);
 
-		const yScale = d3.scaleLinear().domain([0, yMax]).range([height, 0]);
+		const yScale = d3
+			.scaleLinear()
+			.domain([Math.max(yMin - 10, 0), yMax + 10])
+			.range([height, 0]);
 
 		const colorScale = d3
 			.scaleLinear<string>()
-			.domain([yMin, yMax])
+			.domain([yMaxMin, yMax])
 			.range(['#fdf29a', '#fb918f']) // yellow to red
 			.interpolate(d3.interpolateHsl); // Use HSL for better color transitions
 
@@ -157,7 +163,8 @@
 			.line<number>()
 			.x((d, i) => xScale(xValues[i]))
 			.y((d) => yScale(d))
-			.defined((d) => d !== 0); // Handle undefined/null values
+			.defined((d) => d !== 0) // Handle undefined/null values
+			.curve(d3.curveBasis); // ← Added this line
 
 		// Draw lines
 		g.selectAll('.line')
@@ -187,7 +194,7 @@
 						const maxVal = d3.max(d.values) || 0;
 						return d.date === selectedDate ? colorScale(maxVal as number) : 'grey';
 					})
-					.attr('stroke-width', d.date === selectedDate ? 5 : 2)
+					.attr('stroke-width', d.date === selectedDate ? 5 : 1.5)
 					.attr('stroke-opacity', d.date === selectedDate ? 1 : 0.2)
 					.attr('d', line(d.values))
 					.style('pointer-events', 'none'); // Disable pointer events on visible line
