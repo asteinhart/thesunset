@@ -25,7 +25,7 @@ class SunsetDetector:
         self.best_image = best_image
         self.today_str = images.split("/")[-1] if images else None
         if self.today_str:
-            today_date = datetime.strptime(self.today_str, "%Y%m%d").date()
+            today_date = datetime.strptime(self.today_str, "%Y-%m-%d").date()
             self.sunset_time = find_sunset_time(date=today_date).strftime(
                 "%Y-%m-%d_%H:%M:%S"
             )
