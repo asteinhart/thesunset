@@ -23,6 +23,14 @@
 
 	$inspect($scores, 'scores');
 
+	// check if today has a score, if not set currentDate to yesterday
+	let startDate = formatDate($currentDate);
+	if ($scores && !$scores[startDate]) {
+		const yesterday = new Date();
+		yesterday.setDate(yesterday.getDate() - 1);
+		currentDate.set(yesterday);
+	}
+
 	let sunsetDate = $state(formatDate($currentDate));
 
 	function getSunsetImage(date: string): string | null {
