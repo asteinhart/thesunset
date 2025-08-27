@@ -43,10 +43,11 @@ def run(take_image: bool = True, testing: bool = False) -> bool:
             end_time=end_time,
         )
 
+    day = start_time.strftime("%Y-%m-%d")
     logger.info(
-        f"Finished taking pictures, running SunsetDetector on images in {DIR / 'tmp'}"
+        f"Finished taking pictures, running SunsetDetector on images in {DIR / 'tmp' / day}"
     )
-    detector = SunsetDetector(images=DIR / "tmp" / str(start_time.date()))
+    detector = SunsetDetector(images=DIR / "tmp" / day)
     detector.run()
 
     # Clean up temporary files
