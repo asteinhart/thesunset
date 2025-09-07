@@ -9,7 +9,7 @@
 	let containerElement: HTMLDivElement;
 	let selectedDate = $derived(format($currentDate, 'yyyy-MM-dd'));
 
-	const xValues = [-40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15];
+	const xValues = [-30, -25, -20, -15, -10, -5, 0, 5, 10, 15];
 
 	let prepData = Object.entries($scores).map(([key, item]) => ({
 		date: key,
@@ -102,7 +102,7 @@
 		const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
 		// Scales
-		const xScale = d3.scaleLinear().domain([-40, 15]).range([0, width]);
+		const xScale = d3.scaleLinear().domain([-30, 15]).range([0, width]);
 
 		const yScale = d3
 			.scaleLinear()
@@ -116,8 +116,8 @@
 			.interpolate(d3.interpolateHsl); // Use HSL for better color transitions
 
 		// X axis - only show specific labels
-		const displayTicks = [-40, -30, -20, -10, 0, 10];
-		const displayLabels = ['-40min', '-30', '-20', '-10', 'Sunset', '+10'];
+		const displayTicks = [-30, -20, -10, 0, 10];
+		const displayLabels = ['-30min', '-20', '-10', 'Sunset', '+10'];
 
 		g.append('g')
 			.attr('transform', `translate(0,${height})`)
@@ -164,7 +164,8 @@
 			.x((d, i) => xScale(xValues[i]))
 			.y((d) => yScale(d))
 			.defined((d) => d !== 0) // Handle undefined/null values
-			.curve(d3.curveBasis); // ← Added this line
+			.curve(d3.curveCatmullRom.alpha(0.5));
+		//.curve(d3.curveBasis); // ← Added this line
 
 		// Draw lines
 		g.selectAll('.line')
