@@ -253,6 +253,8 @@ def check_system_resources():
     logger.info(f"Disk usage: {disk.percent}% (Free: {disk.free / 1024 / 1024:.1f} MB)")
 
     # Check CPU usage
+    # warm up call to get accurate reading
+    psutil.cpu_percent(interval=None)
     cpu_percent = psutil.cpu_percent(interval=1)
     logger.info(f"CPU usage: {cpu_percent}%")
 
