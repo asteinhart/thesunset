@@ -177,7 +177,7 @@ def find_sunset_time(
 
 
 def determine_start_end_time(
-    when: str = "today", before_sun: int = 40, after_sun: int = 30
+    when: str = "today", before_sun: int = 30, after_sun: int = 15
 ) -> tuple:
     """
     Determine the start and end time for capturing images.
