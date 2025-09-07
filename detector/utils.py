@@ -245,12 +245,16 @@ def check_system_resources():
     # Check memory
     memory = psutil.virtual_memory()
     logger.info(
-        f"Memory usage: {memory.percent}% (Available: {memory.available / 1024 / 1024:.1f} MB)"
+        f"Memory usage: {memory.percent}% (Total: {memory.total / 1024 / 1024:.1f} MB, Used: {memory.used / 1024 / 1024:.1f} MB, Available: {memory.available / 1024 / 1024:.1f} MB, Cached: {memory.cached / 1024 / 1024:.1f} MB)"
     )
 
     # Check disk space
     disk = psutil.disk_usage("/")
     logger.info(f"Disk usage: {disk.percent}% (Free: {disk.free / 1024 / 1024:.1f} MB)")
+
+    # Check CPU usage
+    cpu_percent = psutil.cpu_percent(interval=1)
+    logger.info(f"CPU usage: {cpu_percent}%")
 
     if memory.percent > 85:
         logger.warning("High memory usage detected!")
