@@ -7,7 +7,12 @@ from pathlib import Path
 from SunsetDetector import SunsetDetector
 from image_capture import capture_images
 from logger import logger
-from utils import determine_start_end_time, tmp_cleanup, find_sunset_time
+from utils import (
+    determine_start_end_time,
+    tmp_cleanup,
+    find_sunset_time,
+    check_system_resources,
+)
 
 DIR = Path(__file__).parent.resolve()
 
@@ -47,8 +52,21 @@ def run(take_image: bool = True, testing: bool = False) -> bool:
     logger.info(
         f"Finished taking pictures, running SunsetDetector on images in {DIR / 'tmp' / day}"
     )
-    detector = SunsetDetector(images=DIR / "tmp" / day)
-    detector.run()
+
+    logger.info("Checking system resources before running SunsetDetector...")
+    if not check_system_resources():
+        logger.error("Insufficient system resources")
+        return False
+
+    try:
+        detector = SunsetDetector(images=DIR / "tmp" / day)
+        detector.run()
+    except MemoryError:
+        logger.error("Out of memory when running SunsetDetector")
+        return False
+    except Exception as e:
+        logger.error(f"SunsetDetector failed: {str(e)}")
+        return False
 
     # Clean up temporary files
     # if not testing:

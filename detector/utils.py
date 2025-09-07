@@ -14,6 +14,8 @@ from env import (
 )
 from pathlib import Path
 from logger import logger
+import psutil
+import gc
 
 DIR = Path(__file__).parent.resolve()
 
@@ -231,5 +233,27 @@ def save_folder_s3(
         local_file = folder_path / filename
         s3_object = f"{s3_folder}{filename}"
         upload_to_s3(str(local_file), s3_object, bucket)
+
+    return True
+
+
+def check_system_resources():
+
+    # Force garbage collection
+    gc.collect()
+
+    # Check memory
+    memory = psutil.virtual_memory()
+    logger.info(
+        f"Memory usage: {memory.percent}% (Available: {memory.available / 1024 / 1024:.1f} MB)"
+    )
+
+    # Check disk space
+    disk = psutil.disk_usage("/")
+    logger.info(f"Disk usage: {disk.percent}% (Free: {disk.free / 1024 / 1024:.1f} MB)")
+
+    if memory.percent > 85:
+        logger.warning("High memory usage detected!")
+        return False
 
     return True

@@ -9,3 +9,4 @@ s3transfer==0.13.0
 schedule==1.2.2
 six==1.17.0
 urllib3==2.5.0
+psutil==7.0.0
