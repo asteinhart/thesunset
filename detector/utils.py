@@ -209,7 +209,7 @@ def tmp_cleanup(tmp_dir: Path = DIR / "tmp/") -> None:
         print(f"Temporary directory {tmp_dir} does not exist.")
 
 
-def save_folder_s3(
+def upload_folder_s3(
     folder_path: Path = DIR / "tmp/",
     s3_folder: str = "images/",
     bucket: str = "thesunset",
