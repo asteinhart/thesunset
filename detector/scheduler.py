@@ -59,7 +59,7 @@ def run(take_image: bool = True, testing: bool = False) -> bool:
         return False
 
     try:
-        detector = SunsetDetector(images=DIR / "tmp" / day)
+        detector = SunsetDetector(images=str(DIR / "tmp" / day))
         detector.run()
     except MemoryError:
         logger.error("Out of memory when running SunsetDetector")
