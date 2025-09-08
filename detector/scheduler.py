@@ -102,7 +102,16 @@ def schedule_next_run(testing: bool = False) -> bool:
         f"The sunset tomorrow is at {sunset}. Taking pictures from {start_time} to {end_time}"
     )
     schedule.clear()
-    schedule.every().day.at((start_time + timedelta(minutes=10)).strftime("%H:%M")).do(
+
+    # # if > 15 minutes before start time, set fundction to reboot 15 minutes before start time
+    # if datetime.now(tz=datetime.now().astimezone().tzinfo) < start_time - timedelta(
+    #     minutes=15
+    # ):
+    #     reboot_time = (start_time - timedelta(minutes=15)).strftime("%H:%M")
+    #     logger.info(f"Scheduling system reboot at {reboot_time}")
+    #     os.system(f"echo 'sudo reboot' | at {reboot_time}")
+
+    schedule.every().day.at((start_time - timedelta(minutes=3)).strftime("%H:%M")).do(
         run, testing=testing
     )
     logger.info(
@@ -129,8 +138,6 @@ def main(testing: bool = False) -> None:
         logger.info("Checking for scheduled runs...")
         if schedule.run_pending():
             logger.info("Scheduled run executed")
-        else:
-            logger.info("No scheduled run found")
         time.sleep(60)
 
 
