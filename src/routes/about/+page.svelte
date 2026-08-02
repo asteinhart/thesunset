@@ -304,6 +304,19 @@
 				</p>
 				<a href="/" class="sunset-button"> See the latest sunset </a>
 
+				<div class="subscribe-container">
+					<p>want to stay up to date on my latest projects and blog posts?</p>
+					<form
+						action="https://buttondown.com/api/emails/embed-subscribe/asteinhart"
+						method="post"
+						class="embeddable-buttondown-form"
+					>
+						<label for="bd-email">enter your email</label>
+						<input type="email" name="email" id="bd-email" />
+						<input type="submit" value="subscribe" />
+					</form>
+				</div>
+
 				<p>
 					That's all for now. Maybe I will do an update with an analysis once I get a month or two
 					of photos. As always, all my projects are completely open source to check out <a
@@ -563,6 +576,31 @@
 		text-align: center;
 		font-size: 0.9rem;
 		margin-top: 1rem;
+	}
+
+	.subscribe-container {
+		margin: 1rem auto;
+		width: 90%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.subscribe-container p {
+		font-size: 1rem;
+	}
+
+	.subscribe-container form input[type='email'] {
+		border: 1px solid #ccc;
+	}
+
+	.subscribe-container form input[type='submit'] {
+		background-color: #fba58b;
+		color: black;
+		border: none;
+		padding: 0em 1rem;
+		border-radius: 4px;
+		cursor: pointer;
 	}
 
 	/* Responsive adjustments for smaller screens */
