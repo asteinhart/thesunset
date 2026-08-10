@@ -56,7 +56,9 @@
 			<div class="subtitle">
 				Using a small camera and some code, enjoy the sunset from last night every day, all day.
 			</div>
-			<p class="byline">By <a href="austinsteinhart.com">Austin Steinhart</a> | Summer 2025</p>
+			<p class="byline">
+				By <a href="https://austinsteinhart.com">Austin Steinhart</a> | Summer 2025
+			</p>
 			<hr class="divider" />
 		</div>
 		<div class="body">
