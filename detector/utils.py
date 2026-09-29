@@ -20,21 +20,27 @@ import gc
 DIR = Path(__file__).parent.resolve()
 
 
-def upload_to_s3(local_file: str, s3_object: str, bucket: str = "thesunset") -> bool:
+def upload_to_s3(
+    local_file: str, s3_object: str, bucket: str = "thesunset", s3_client=None
+) -> bool:
     """
     Upload a file to an S3 bucket using access keys
 
     :param local_file: Path to local file
     :param bucket: Target S3 bucket name
     :param s3_object: Custom object name (optional)
+    :param s3_client: Reuse an existing boto3 S3 client instead of creating a
+        new session/client for this call (useful when uploading many files,
+        e.g. in parallel, to avoid per-call session setup overhead)
     :return: True if successful, False otherwise
     """
-    # Create session with explicit credentials
-    session = boto3.Session(
-        aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY
-    )
-
-    s3 = session.client("s3")
+    if s3_client is not None:
+        s3 = s3_client
+    else:
+        session = boto3.Session(
+            aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY
+        )
+        s3 = session.client("s3")
 
     try:
         s3.upload_file(
